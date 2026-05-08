@@ -79,7 +79,6 @@ class DatabaseSeeder extends Seeder
         // Seller & Baker (Christina)
         DB::table('role_user')->insertOrIgnore([
             ['user_id' => 2, 'role_id' => $sellerId],
-            ['user_id' => 2, 'role_id' => $bakerId],
         ]);
         // Baker only (Tom)
         DB::table('role_user')->insertOrIgnore([

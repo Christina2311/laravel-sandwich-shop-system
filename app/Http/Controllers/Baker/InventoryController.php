@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Inventory;
 use App\Models\StockIn;
 use App\Models\StockOut;
+use App\Models\StockInRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class InventoryController extends Controller
 {
@@ -25,17 +27,26 @@ class InventoryController extends Controller
         // Unique categories for the filter dropdown (from products)
         $categories  = Product::select('category')->distinct()->whereNotNull('category')->pluck('category');
 
+        // Baker's own pending requests
+        $employee    = Auth::user()->employee;
+        $myRequests  = StockInRequest::with('product')
+            ->where('employee_id', $employee?->id)
+            ->orderByDesc('created_at')
+            ->get();
+
         return view('baker.inventorymanagement.index', compact(
             'inventories',
             'stockIns',
             'stockOuts',
             'products',
-            'categories'
+            'categories',
+            'myRequests'
         ));
     }
 
     /**
-     * Store a new Stock In record and update inventory.
+     * Baker submits a Stock In REQUEST (does NOT update inventory directly).
+     * Manager must approve before inventory is updated.
      */
     public function storeStockIn(Request $request)
     {
@@ -48,37 +59,18 @@ class InventoryController extends Controller
             'note'        => 'nullable|string',
         ]);
 
-        DB::transaction(function () use ($request) {
-            // Create stock in record
-            StockIn::create([
-                'employee_id' => $request->employee_id,
-                'product_id'  => $request->product_id,
-                'quantity'    => $request->quantity,
-                'supplier'    => $request->supplier,
-                'date'        => $request->date,
-                'note'        => $request->note,
-            ]);
+        StockInRequest::create([
+            'employee_id' => $request->employee_id,
+            'product_id'  => $request->product_id,
+            'quantity'    => $request->quantity,
+            'supplier'    => $request->supplier,
+            'date'        => $request->date,
+            'note'        => $request->note,
+            'status'      => 'pending',
+        ]);
 
-            // Update or create inventory
-            $inventory = Inventory::where('product_id', $request->product_id)->first();
-
-            if ($inventory) {
-                $newQty = $inventory->quantity + $request->quantity;
-                $inventory->update([
-                    'quantity' => $newQty,
-                    'status'   => $this->resolveStatus($newQty),
-                ]);
-            } else {
-                Inventory::create([
-                    'product_id' => $request->product_id,
-                    'quantity'   => $request->quantity,
-                    'unit'       => 'pcs',
-                    'status'     => $this->resolveStatus($request->quantity),
-                ]);
-            }
-        });
-
-        return redirect()->route('baker.inventory.index')->with('success', 'Stock In recorded successfully.');
+        return redirect()->route('baker.inventorymanagement.index')
+            ->with('success', 'Stock request submitted! Awaiting manager approval.');
     }
 
     /**
@@ -102,7 +94,6 @@ class InventoryController extends Controller
         }
 
         DB::transaction(function () use ($request, $inventory) {
-            // Create stock out record
             StockOut::create([
                 'employee_id' => $request->employee_id,
                 'product_id'  => $request->product_id,
@@ -112,7 +103,6 @@ class InventoryController extends Controller
                 'note'        => $request->note,
             ]);
 
-            // Deduct from inventory
             $newQty = $inventory->quantity - $request->quantity;
             $inventory->update([
                 'quantity' => $newQty,
@@ -120,7 +110,8 @@ class InventoryController extends Controller
             ]);
         });
 
-        return redirect()->route('baker.inventory.index')->with('success', 'Stock Out recorded successfully.');
+        return redirect()->route('baker.inventorymanagement.index')
+            ->with('success', 'Stock Out recorded successfully.');
     }
 
     /**

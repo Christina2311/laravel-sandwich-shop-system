@@ -420,9 +420,15 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('manager.reports') }}">
                     <img src="{{ asset('images/reports_icon.png') }}" alt="Reports" />
                     Reports
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('manager.stockrequests.index') }}">
+                    <img src="{{ asset('images/notif_icon.png') }}" alt="Stock Requests" />
+                    Stock Requests
                 </a>
             </li>
         </ul>

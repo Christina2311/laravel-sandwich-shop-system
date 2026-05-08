@@ -3,119 +3,110 @@
 -- Import this AFTER running: php artisan migrate:fresh && php artisan db:seed
 -- ============================================================
 
--- Clear tables before re-importing (safe to run multiple times)
-SET FOREIGN_KEY_CHECKS=0;
-DELETE FROM `stock_ins`;
-DELETE FROM `payments`;
-DELETE FROM `order_items`;
-DELETE FROM `orders`;
-DELETE FROM `customers`;
-SET FOREIGN_KEY_CHECKS=1;
-
 SET FOREIGN_KEY_CHECKS=0;
 
 -- Customers (100)
-INSERT IGNORE INTO `customers` (`id`, `customer_fn`, `customer_ln`, `phone`, `email`, `address`, `created_at`, `updated_at`) VALUES
-(1, 'Ursula', 'Garcia', '09126855092', 'ursula1@email.com', NULL, NOW(), NOW()),
-(2, 'Xavier', 'Gomez', '09362950628', 'xavier2@email.com', NULL, NOW(), NOW()),
-(3, 'Helen', 'Ramos', '09890779946', 'helen3@email.com', NULL, NOW(), NOW()),
-(4, 'Diana', 'Navarro', '09193349856', 'diana4@email.com', NULL, NOW(), NOW()),
-(5, 'Sam', 'Mendoza', '09134126396', 'sam5@email.com', NULL, NOW(), NOW()),
-(6, 'Ana', 'Cruz', '09334760738', 'ana6@email.com', NULL, NOW(), NOW()),
-(7, 'Helen', 'Morales', '09746412689', 'helen7@email.com', NULL, NOW(), NOW()),
-(8, 'Ana', 'Navarro', '09313500298', 'ana8@email.com', NULL, NOW(), NOW()),
-(9, 'Wendy', 'Navarro', '09550455977', 'wendy9@email.com', NULL, NOW(), NOW()),
-(10, 'Helen', 'Villanueva', '09732719211', 'helen10@email.com', NULL, NOW(), NOW()),
-(11, 'Ivan', 'Santos', '09914763202', 'ivan11@email.com', NULL, NOW(), NOW()),
-(12, 'Zeus', 'Torres', '09849621470', 'zeus12@email.com', NULL, NOW(), NOW()),
-(13, 'Nina', 'Dela Cruz', '09398362082', 'nina13@email.com', NULL, NOW(), NOW()),
-(14, 'Eduardo', 'Flores', '09919795579', 'eduardo14@email.com', NULL, NOW(), NOW()),
-(15, 'Kevin', 'Garcia', '09199585092', 'kevin15@email.com', NULL, NOW(), NOW()),
-(16, 'Marco', 'Garcia', '09485451171', 'marco16@email.com', NULL, NOW(), NOW()),
-(17, 'Boris', 'Bautista', '09748245888', 'boris17@email.com', NULL, NOW(), NOW()),
-(18, 'Ivan', 'Reyes', '09883543540', 'ivan18@email.com', NULL, NOW(), NOW()),
-(19, 'Oscar', 'Navarro', '09234031070', 'oscar19@email.com', NULL, NOW(), NOW()),
-(20, 'Dave', 'Aquino', '09184611066', 'dave20@email.com', NULL, NOW(), NOW()),
-(21, 'Rosa', 'Hernandez', '09990566476', 'rosa21@email.com', NULL, NOW(), NOW()),
-(22, 'Ursula', 'Rivera', '09488302652', 'ursula22@email.com', NULL, NOW(), NOW()),
-(23, 'Sam', 'Flores', '09856528252', 'sam23@email.com', NULL, NOW(), NOW()),
-(24, 'Carlo', 'Reyes', '09810026086', 'carlo24@email.com', NULL, NOW(), NOW()),
-(25, 'Helen', 'Hernandez', '09185675980', 'helen25@email.com', NULL, NOW(), NOW()),
-(26, 'Boris', 'Lopez', '09208449460', 'boris26@email.com', NULL, NOW(), NOW()),
-(27, 'Marco', 'Gomez', '09586845604', 'marco27@email.com', NULL, NOW(), NOW()),
-(28, 'Ursula', 'Bautista', '09274648506', 'ursula28@email.com', NULL, NOW(), NOW()),
-(29, 'Liza', 'Bautista', '09324956459', 'liza29@email.com', NULL, NOW(), NOW()),
-(30, 'Victor', 'Gomez', '09853573823', 'victor30@email.com', NULL, NOW(), NOW()),
-(31, 'Dave', 'Cruz', '09754049436', 'dave31@email.com', NULL, NOW(), NOW()),
-(32, 'Ursula', 'Torres', '09673528321', 'ursula32@email.com', NULL, NOW(), NOW()),
-(33, 'Xavier', 'Lopez', '09275452091', 'xavier33@email.com', NULL, NOW(), NOW()),
-(34, 'Oscar', 'Aquino', '09389854268', 'oscar34@email.com', NULL, NOW(), NOW()),
-(35, 'Dave', 'Navarro', '09335809993', 'dave35@email.com', NULL, NOW(), NOW()),
-(36, 'Victor', 'Dela Cruz', '09924970419', 'victor36@email.com', NULL, NOW(), NOW()),
-(37, 'Yolanda', 'Reyes', '09345938494', 'yolanda37@email.com', NULL, NOW(), NOW()),
-(38, 'Alma', 'Reyes', '09964411347', 'alma38@email.com', NULL, NOW(), NOW()),
-(39, 'Kevin', 'Aquino', '09387484583', 'kevin39@email.com', NULL, NOW(), NOW()),
-(40, 'Carlo', 'Flores', '09709004943', 'carlo40@email.com', NULL, NOW(), NOW()),
-(41, 'Clara', 'Dela Cruz', '09328306011', 'clara41@email.com', NULL, NOW(), NOW()),
-(42, 'Ursula', 'Castillo', '09524806516', 'ursula42@email.com', NULL, NOW(), NOW()),
-(43, 'Clara', 'Villanueva', '09253407200', 'clara43@email.com', NULL, NOW(), NOW()),
-(44, 'Ivan', 'Ramos', '09364814270', 'ivan44@email.com', NULL, NOW(), NOW()),
-(45, 'Xavier', 'Navarro', '09678722458', 'xavier45@email.com', NULL, NOW(), NOW()),
-(46, 'Ivan', 'Perez', '09560027313', 'ivan46@email.com', NULL, NOW(), NOW()),
-(47, 'Clara', 'Perez', '09528853029', 'clara47@email.com', NULL, NOW(), NOW()),
-(48, 'Liza', 'Lopez', '09248532577', 'liza48@email.com', NULL, NOW(), NOW()),
-(49, 'Quino', 'Castillo', '09197613238', 'quino49@email.com', NULL, NOW(), NOW()),
-(50, 'Yolanda', 'Reyes', '09217734861', 'yolanda50@email.com', NULL, NOW(), NOW()),
-(51, 'Eduardo', 'Torres', '09950488739', 'eduardo51@email.com', NULL, NOW(), NOW()),
-(52, 'Victor', 'Mendoza', '09740389325', 'victor52@email.com', NULL, NOW(), NOW()),
-(53, 'Carlo', 'Aquino', '09509760584', 'carlo53@email.com', NULL, NOW(), NOW()),
-(54, 'Tina', 'Villanueva', '09668132202', 'tina54@email.com', NULL, NOW(), NOW()),
-(55, 'Ivan', 'Navarro', '09112327652', 'ivan55@email.com', NULL, NOW(), NOW()),
-(56, 'Victor', 'Garcia', '09831980933', 'victor56@email.com', NULL, NOW(), NOW()),
-(57, 'Clara', 'Navarro', '09906248900', 'clara57@email.com', NULL, NOW(), NOW()),
-(58, 'Ivan', 'Dela Cruz', '09219778234', 'ivan58@email.com', NULL, NOW(), NOW()),
-(59, 'Jane', 'Mendoza', '09269820594', 'jane59@email.com', NULL, NOW(), NOW()),
-(60, 'Oscar', 'Santos', '09875340444', 'oscar60@email.com', NULL, NOW(), NOW()),
-(61, 'Clara', 'Gomez', '09637500247', 'clara61@email.com', NULL, NOW(), NOW()),
-(62, 'Yolanda', 'Torres', '09645119047', 'yolanda62@email.com', NULL, NOW(), NOW()),
-(63, 'Dave', 'Garcia', '09771410971', 'dave63@email.com', NULL, NOW(), NOW()),
-(64, 'Jane', 'Morales', '09753876785', 'jane64@email.com', NULL, NOW(), NOW()),
-(65, 'Gino', 'Ramos', '09501486939', 'gino65@email.com', NULL, NOW(), NOW()),
-(66, 'Yolanda', 'Torres', '09679153816', 'yolanda66@email.com', NULL, NOW(), NOW()),
-(67, 'Yolanda', 'Morales', '09100614068', 'yolanda67@email.com', NULL, NOW(), NOW()),
-(68, 'Tina', 'Dela Cruz', '09624636385', 'tina68@email.com', NULL, NOW(), NOW()),
-(69, 'Ana', 'Garcia', '09489747629', 'ana69@email.com', NULL, NOW(), NOW()),
-(70, 'Clara', 'Hernandez', '09357109965', 'clara70@email.com', NULL, NOW(), NOW()),
-(71, 'Ben', 'Lopez', '09709194872', 'ben71@email.com', NULL, NOW(), NOW()),
-(72, 'Carlo', 'Cruz', '09885879795', 'carlo72@email.com', NULL, NOW(), NOW()),
-(73, 'Paula', 'Cruz', '09916690353', 'paula73@email.com', NULL, NOW(), NOW()),
-(74, 'Rosa', 'Ramos', '09237859287', 'rosa74@email.com', NULL, NOW(), NOW()),
-(75, 'Victor', 'Castillo', '09690347116', 'victor75@email.com', NULL, NOW(), NOW()),
-(76, 'Faye', 'Gomez', '09666585408', 'faye76@email.com', NULL, NOW(), NOW()),
-(77, 'Boris', 'Rivera', '09554340903', 'boris77@email.com', NULL, NOW(), NOW()),
-(78, 'Gino', 'Navarro', '09910959828', 'gino78@email.com', NULL, NOW(), NOW()),
-(79, 'Xavier', 'Flores', '09865523129', 'xavier79@email.com', NULL, NOW(), NOW()),
-(80, 'Jane', 'Aquino', '09821218382', 'jane80@email.com', NULL, NOW(), NOW()),
-(81, 'Ursula', 'Bautista', '09570406376', 'ursula81@email.com', NULL, NOW(), NOW()),
-(82, 'Clara', 'Morales', '09584779555', 'clara82@email.com', NULL, NOW(), NOW()),
-(83, 'Diana', 'Lopez', '09341266931', 'diana83@email.com', NULL, NOW(), NOW()),
-(84, 'Carlo', 'Dela Cruz', '09122585366', 'carlo84@email.com', NULL, NOW(), NOW()),
-(85, 'Sam', 'Navarro', '09347083812', 'sam85@email.com', NULL, NOW(), NOW()),
-(86, 'Sam', 'Lopez', '09107721109', 'sam86@email.com', NULL, NOW(), NOW()),
-(87, 'Carlo', 'Reyes', '09345824373', 'carlo87@email.com', NULL, NOW(), NOW()),
-(88, 'Carlo', 'Reyes', '09454794895', 'carlo88@email.com', NULL, NOW(), NOW()),
-(89, 'Carlo', 'Morales', '09355555531', 'carlo89@email.com', NULL, NOW(), NOW()),
-(90, 'Ivan', 'Castillo', '09330035022', 'ivan90@email.com', NULL, NOW(), NOW()),
-(91, 'Rosa', 'Ramos', '09876693898', 'rosa91@email.com', NULL, NOW(), NOW()),
-(92, 'Dave', 'Perez', '09718702544', 'dave92@email.com', NULL, NOW(), NOW()),
-(93, 'Paula', 'Lopez', '09942478695', 'paula93@email.com', NULL, NOW(), NOW()),
-(94, 'Paula', 'Mendoza', '09304451095', 'paula94@email.com', NULL, NOW(), NOW()),
-(95, 'Diana', 'Garcia', '09807577342', 'diana95@email.com', NULL, NOW(), NOW()),
-(96, 'Nina', 'Bautista', '09554814084', 'nina96@email.com', NULL, NOW(), NOW()),
-(97, 'Nina', 'Villanueva', '09882839238', 'nina97@email.com', NULL, NOW(), NOW()),
-(98, 'Ben', 'Garcia', '09165082363', 'ben98@email.com', NULL, NOW(), NOW()),
-(99, 'Marco', 'Dela Cruz', '09959629660', 'marco99@email.com', NULL, NOW(), NOW()),
-(100, 'Boris', 'Garcia', '09366992705', 'boris100@email.com', NULL, NOW(), NOW());
+INSERT INTO `customers` (`id`, `customer_fn`, `customer_ln`, `phone`, `email`, `created_at`, `updated_at`) VALUES
+(1, 'Ursula', 'Garcia', '09126855092', 'ursula1@email.com', NOW(), NOW()),
+(2, 'Xavier', 'Gomez', '09362950628', 'xavier2@email.com', NOW(), NOW()),
+(3, 'Helen', 'Ramos', '09890779946', 'helen3@email.com', NOW(), NOW()),
+(4, 'Diana', 'Navarro', '09193349856', 'diana4@email.com', NOW(), NOW()),
+(5, 'Sam', 'Mendoza', '09134126396', 'sam5@email.com', NOW(), NOW()),
+(6, 'Ana', 'Cruz', '09334760738', 'ana6@email.com', NOW(), NOW()),
+(7, 'Helen', 'Morales', '09746412689', 'helen7@email.com', NOW(), NOW()),
+(8, 'Ana', 'Navarro', '09313500298', 'ana8@email.com', NOW(), NOW()),
+(9, 'Wendy', 'Navarro', '09550455977', 'wendy9@email.com', NOW(), NOW()),
+(10, 'Helen', 'Villanueva', '09732719211', 'helen10@email.com', NOW(), NOW()),
+(11, 'Ivan', 'Santos', '09914763202', 'ivan11@email.com', NOW(), NOW()),
+(12, 'Zeus', 'Torres', '09849621470', 'zeus12@email.com', NOW(), NOW()),
+(13, 'Nina', 'Dela Cruz', '09398362082', 'nina13@email.com', NOW(), NOW()),
+(14, 'Eduardo', 'Flores', '09919795579', 'eduardo14@email.com', NOW(), NOW()),
+(15, 'Kevin', 'Garcia', '09199585092', 'kevin15@email.com', NOW(), NOW()),
+(16, 'Marco', 'Garcia', '09485451171', 'marco16@email.com', NOW(), NOW()),
+(17, 'Boris', 'Bautista', '09748245888', 'boris17@email.com', NOW(), NOW()),
+(18, 'Ivan', 'Reyes', '09883543540', 'ivan18@email.com', NOW(), NOW()),
+(19, 'Oscar', 'Navarro', '09234031070', 'oscar19@email.com', NOW(), NOW()),
+(20, 'Dave', 'Aquino', '09184611066', 'dave20@email.com', NOW(), NOW()),
+(21, 'Rosa', 'Hernandez', '09990566476', 'rosa21@email.com', NOW(), NOW()),
+(22, 'Ursula', 'Rivera', '09488302652', 'ursula22@email.com', NOW(), NOW()),
+(23, 'Sam', 'Flores', '09856528252', 'sam23@email.com', NOW(), NOW()),
+(24, 'Carlo', 'Reyes', '09810026086', 'carlo24@email.com', NOW(), NOW()),
+(25, 'Helen', 'Hernandez', '09185675980', 'helen25@email.com', NOW(), NOW()),
+(26, 'Boris', 'Lopez', '09208449460', 'boris26@email.com', NOW(), NOW()),
+(27, 'Marco', 'Gomez', '09586845604', 'marco27@email.com', NOW(), NOW()),
+(28, 'Ursula', 'Bautista', '09274648506', 'ursula28@email.com', NOW(), NOW()),
+(29, 'Liza', 'Bautista', '09324956459', 'liza29@email.com', NOW(), NOW()),
+(30, 'Victor', 'Gomez', '09853573823', 'victor30@email.com', NOW(), NOW()),
+(31, 'Dave', 'Cruz', '09754049436', 'dave31@email.com', NOW(), NOW()),
+(32, 'Ursula', 'Torres', '09673528321', 'ursula32@email.com', NOW(), NOW()),
+(33, 'Xavier', 'Lopez', '09275452091', 'xavier33@email.com', NOW(), NOW()),
+(34, 'Oscar', 'Aquino', '09389854268', 'oscar34@email.com', NOW(), NOW()),
+(35, 'Dave', 'Navarro', '09335809993', 'dave35@email.com', NOW(), NOW()),
+(36, 'Victor', 'Dela Cruz', '09924970419', 'victor36@email.com', NOW(), NOW()),
+(37, 'Yolanda', 'Reyes', '09345938494', 'yolanda37@email.com', NOW(), NOW()),
+(38, 'Alma', 'Reyes', '09964411347', 'alma38@email.com', NOW(), NOW()),
+(39, 'Kevin', 'Aquino', '09387484583', 'kevin39@email.com', NOW(), NOW()),
+(40, 'Carlo', 'Flores', '09709004943', 'carlo40@email.com', NOW(), NOW()),
+(41, 'Clara', 'Dela Cruz', '09328306011', 'clara41@email.com', NOW(), NOW()),
+(42, 'Ursula', 'Castillo', '09524806516', 'ursula42@email.com', NOW(), NOW()),
+(43, 'Clara', 'Villanueva', '09253407200', 'clara43@email.com', NOW(), NOW()),
+(44, 'Ivan', 'Ramos', '09364814270', 'ivan44@email.com', NOW(), NOW()),
+(45, 'Xavier', 'Navarro', '09678722458', 'xavier45@email.com', NOW(), NOW()),
+(46, 'Ivan', 'Perez', '09560027313', 'ivan46@email.com', NOW(), NOW()),
+(47, 'Clara', 'Perez', '09528853029', 'clara47@email.com', NOW(), NOW()),
+(48, 'Liza', 'Lopez', '09248532577', 'liza48@email.com', NOW(), NOW()),
+(49, 'Quino', 'Castillo', '09197613238', 'quino49@email.com', NOW(), NOW()),
+(50, 'Yolanda', 'Reyes', '09217734861', 'yolanda50@email.com', NOW(), NOW()),
+(51, 'Eduardo', 'Torres', '09950488739', 'eduardo51@email.com', NOW(), NOW()),
+(52, 'Victor', 'Mendoza', '09740389325', 'victor52@email.com', NOW(), NOW()),
+(53, 'Carlo', 'Aquino', '09509760584', 'carlo53@email.com', NOW(), NOW()),
+(54, 'Tina', 'Villanueva', '09668132202', 'tina54@email.com', NOW(), NOW()),
+(55, 'Ivan', 'Navarro', '09112327652', 'ivan55@email.com', NOW(), NOW()),
+(56, 'Victor', 'Garcia', '09831980933', 'victor56@email.com', NOW(), NOW()),
+(57, 'Clara', 'Navarro', '09906248900', 'clara57@email.com', NOW(), NOW()),
+(58, 'Ivan', 'Dela Cruz', '09219778234', 'ivan58@email.com', NOW(), NOW()),
+(59, 'Jane', 'Mendoza', '09269820594', 'jane59@email.com', NOW(), NOW()),
+(60, 'Oscar', 'Santos', '09875340444', 'oscar60@email.com', NOW(), NOW()),
+(61, 'Clara', 'Gomez', '09637500247', 'clara61@email.com', NOW(), NOW()),
+(62, 'Yolanda', 'Torres', '09645119047', 'yolanda62@email.com', NOW(), NOW()),
+(63, 'Dave', 'Garcia', '09771410971', 'dave63@email.com', NOW(), NOW()),
+(64, 'Jane', 'Morales', '09753876785', 'jane64@email.com', NOW(), NOW()),
+(65, 'Gino', 'Ramos', '09501486939', 'gino65@email.com', NOW(), NOW()),
+(66, 'Yolanda', 'Torres', '09679153816', 'yolanda66@email.com', NOW(), NOW()),
+(67, 'Yolanda', 'Morales', '09100614068', 'yolanda67@email.com', NOW(), NOW()),
+(68, 'Tina', 'Dela Cruz', '09624636385', 'tina68@email.com', NOW(), NOW()),
+(69, 'Ana', 'Garcia', '09489747629', 'ana69@email.com', NOW(), NOW()),
+(70, 'Clara', 'Hernandez', '09357109965', 'clara70@email.com', NOW(), NOW()),
+(71, 'Ben', 'Lopez', '09709194872', 'ben71@email.com', NOW(), NOW()),
+(72, 'Carlo', 'Cruz', '09885879795', 'carlo72@email.com', NOW(), NOW()),
+(73, 'Paula', 'Cruz', '09916690353', 'paula73@email.com', NOW(), NOW()),
+(74, 'Rosa', 'Ramos', '09237859287', 'rosa74@email.com', NOW(), NOW()),
+(75, 'Victor', 'Castillo', '09690347116', 'victor75@email.com', NOW(), NOW()),
+(76, 'Faye', 'Gomez', '09666585408', 'faye76@email.com', NOW(), NOW()),
+(77, 'Boris', 'Rivera', '09554340903', 'boris77@email.com', NOW(), NOW()),
+(78, 'Gino', 'Navarro', '09910959828', 'gino78@email.com', NOW(), NOW()),
+(79, 'Xavier', 'Flores', '09865523129', 'xavier79@email.com', NOW(), NOW()),
+(80, 'Jane', 'Aquino', '09821218382', 'jane80@email.com', NOW(), NOW()),
+(81, 'Ursula', 'Bautista', '09570406376', 'ursula81@email.com', NOW(), NOW()),
+(82, 'Clara', 'Morales', '09584779555', 'clara82@email.com', NOW(), NOW()),
+(83, 'Diana', 'Lopez', '09341266931', 'diana83@email.com', NOW(), NOW()),
+(84, 'Carlo', 'Dela Cruz', '09122585366', 'carlo84@email.com', NOW(), NOW()),
+(85, 'Sam', 'Navarro', '09347083812', 'sam85@email.com', NOW(), NOW()),
+(86, 'Sam', 'Lopez', '09107721109', 'sam86@email.com', NOW(), NOW()),
+(87, 'Carlo', 'Reyes', '09345824373', 'carlo87@email.com', NOW(), NOW()),
+(88, 'Carlo', 'Reyes', '09454794895', 'carlo88@email.com', NOW(), NOW()),
+(89, 'Carlo', 'Morales', '09355555531', 'carlo89@email.com', NOW(), NOW()),
+(90, 'Ivan', 'Castillo', '09330035022', 'ivan90@email.com', NOW(), NOW()),
+(91, 'Rosa', 'Ramos', '09876693898', 'rosa91@email.com', NOW(), NOW()),
+(92, 'Dave', 'Perez', '09718702544', 'dave92@email.com', NOW(), NOW()),
+(93, 'Paula', 'Lopez', '09942478695', 'paula93@email.com', NOW(), NOW()),
+(94, 'Paula', 'Mendoza', '09304451095', 'paula94@email.com', NOW(), NOW()),
+(95, 'Diana', 'Garcia', '09807577342', 'diana95@email.com', NOW(), NOW()),
+(96, 'Nina', 'Bautista', '09554814084', 'nina96@email.com', NOW(), NOW()),
+(97, 'Nina', 'Villanueva', '09882839238', 'nina97@email.com', NOW(), NOW()),
+(98, 'Ben', 'Garcia', '09165082363', 'ben98@email.com', NOW(), NOW()),
+(99, 'Marco', 'Dela Cruz', '09959629660', 'marco99@email.com', NOW(), NOW()),
+(100, 'Boris', 'Garcia', '09366992705', 'boris100@email.com', NOW(), NOW());
 
 -- Products
 INSERT IGNORE INTO `products` (`id`, `name`, `description`, `price`, `category`, `is_active`, `created_at`, `updated_at`) VALUES
@@ -123,14 +114,29 @@ INSERT IGNORE INTO `products` (`id`, `name`, `description`, `price`, `category`,
 (2, 'Egg Sandwich',      'Classic egg sandwich',  25.00, 'Sandwich', 1, NOW(), NOW()),
 (3, 'Tuna Egg Sandwich', 'Tuna and egg combo',    35.00, 'Sandwich', 1, NOW(), NOW());
 
+-- Ingredients
+INSERT IGNORE INTO `products` (`id`, `name`, `description`, `price`, `category`, `is_active`, `created_at`, `updated_at`) VALUES
+(4, 'Friska Tuna Can',           'Canned tuna for sandwiches',  50.00, 'Ingredient', 1, NOW(), NOW()),
+(5, 'Mafran All-Purpose Dressing', 'Special dressing',         45.00, 'Ingredient', 1, NOW(), NOW()),
+(6, 'Loaf Bread',                'Bread loaf for sandwiches',  65.00, 'Ingredient', 1, NOW(), NOW()),
+(7, 'Eggs',                      'Fresh eggs',                 10.00, 'Ingredient', 1, NOW(), NOW()),
+(8, 'Pepper',                    'Ground pepper',             105.00, 'Ingredient', 1, NOW(), NOW()),
+(9, 'Salt',                      'Table salt',                 58.00, 'Ingredient', 1, NOW(), NOW());
+
 -- Inventory
-INSERT IGNORE INTO `inventory` (`id`, `product_id`, `quantity`, `unit`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 120, 'pcs', 'In Stock',  NOW(), NOW()),
-(2, 2, 85,  'pcs', 'In Stock',  NOW(), NOW()),
-(3, 3, 15,  'pcs', 'Low Stock', NOW(), NOW());
+INSERT INTO `inventory` (`product_id`, `quantity`, `unit`, `status`, `created_at`, `updated_at`) VALUES
+(1, 145, 'pcs',  'In Stock', NOW(), NOW()),   -- Egg Sandwich
+(2, 130, 'pcs',  'In Stock', NOW(), NOW()),   -- Tuna Sandwich
+(3,  85, 'pcs',  'In Stock', NOW(), NOW()),   -- Egg-Tuna Sandwich
+(4, 180, 'can',  'In Stock', NOW(), NOW()),   -- Friska Tuna Can
+(5, 140, 'pack', 'In Stock', NOW(), NOW()),   -- Mafran Dressing
+(6,  95, 'loaf', 'In Stock', NOW(), NOW()),   -- Loaf Bread
+(7, 480, 'pcs',  'In Stock', NOW(), NOW()),   -- Eggs
+(8,  75, 'pack', 'In Stock', NOW(), NOW()),   -- Pepper
+(9,  90, 'pack', 'In Stock', NOW(), NOW());   -- Salt
 
 -- Orders (669)
-INSERT IGNORE INTO `orders` (`id`, `customer_id`, `seller_id`, `baker_id`, `status`, `subtotal`, `tax`, `total_amount`, `created_at`, `updated_at`) VALUES
+INSERT INTO `orders` (`id`, `customer_id`, `seller_id`, `baker_id`, `status`, `subtotal`, `tax`, `total_amount`, `created_at`, `updated_at`) VALUES
 (1, 25, 6, 4, 'Completed', 220.00, 26.40, 246.40, '2026-01-01 12:29:00', '2026-01-01 12:29:00'),
 (2, 71, 1, 2, 'Cancelled', 220.00, 26.40, 246.40, '2026-01-01 08:05:00', '2026-01-01 08:05:00'),
 (3, 63, 6, 4, 'Completed', 135.00, 16.20, 151.20, '2026-01-01 10:24:00', '2026-01-01 10:24:00'),
@@ -802,7 +808,7 @@ INSERT IGNORE INTO `orders` (`id`, `customer_id`, `seller_id`, `baker_id`, `stat
 (669, 36, 1, 6, 'Completed', 490.00, 58.80, 548.80, '2026-05-04 13:45:00', '2026-05-04 13:45:00');
 
 -- Order Items (1371)
-INSERT IGNORE INTO `order_items` (`order_id`, `product_id`, `quantity`, `unit_price`, `created_at`, `updated_at`) VALUES
+INSERT INTO `order_items` (`order_id`, `product_id`, `quantity`, `unit_price`, `created_at`, `updated_at`) VALUES
 (1, 1, 4, 55.00, NOW(), NOW()),
 (2, 1, 4, 55.00, NOW(), NOW()),
 (3, 2, 3, 45.00, NOW(), NOW()),
@@ -2176,7 +2182,7 @@ INSERT IGNORE INTO `order_items` (`order_id`, `product_id`, `quantity`, `unit_pr
 (669, 3, 5, 65.00, NOW(), NOW());
 
 -- Payments (426)
-INSERT IGNORE INTO `payments` (`id`, `order_id`, `payment_method`, `amount`, `created_at`, `updated_at`) VALUES
+INSERT INTO `payments` (`id`, `order_id`, `payment_method`, `amount`, `created_at`, `updated_at`) VALUES
 (1, 1, 'cash', 246.40, '2026-01-01 12:29:00', '2026-01-01 12:29:00'),
 (2, 3, 'cash', 151.20, '2026-01-01 10:24:00', '2026-01-01 10:24:00'),
 (3, 5, 'cash', 526.40, '2026-01-02 17:30:00', '2026-01-02 17:30:00'),
@@ -2605,7 +2611,7 @@ INSERT IGNORE INTO `payments` (`id`, `order_id`, `payment_method`, `amount`, `cr
 (426, 669, 'gcash', 548.80, '2026-05-04 13:45:00', '2026-05-04 13:45:00');
 
 -- Stock Ins (54)
-INSERT IGNORE INTO `stock_ins` (`id`, `employee_id`, `product_id`, `quantity`, `supplier`, `date`, `note`, `created_at`, `updated_at`) VALUES
+INSERT INTO `stock_ins` (`id`, `employee_id`, `product_id`, `quantity`, `supplier`, `date`, `note`, `created_at`, `updated_at`) VALUES
 (1, 1, 1, 95, 'Local Supplier', '2026-01-05', 'Weekly restock', NOW(), NOW()),
 (2, 3, 2, 127, 'Local Supplier', '2026-01-05', 'Weekly restock', NOW(), NOW()),
 (3, 5, 3, 120, 'Local Supplier', '2026-01-05', 'Weekly restock', NOW(), NOW()),

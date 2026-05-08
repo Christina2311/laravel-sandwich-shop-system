@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Baker\InventoryController;
 use App\Http\Controllers\Manager\EmployeeController;
+use App\Http\Controllers\Manager\StockRequestController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -28,7 +29,7 @@ Route::get('/dashboard', function () {
     abort(403, 'Unauthorized');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-    Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -41,26 +42,33 @@ Route::get('/dashboard', function () {
 // ── Manager ──────────────────────────────────────────────────────────────
 Route::middleware(['auth', 'role:manager'])
     ->prefix('manager')
-    ->name('manager.') 
+    ->name('manager.')
     ->group(function () {
-        
-        // Dashboard route[cite: 2]
+
+        // Dashboard
         Route::get('dashboard', [\App\Http\Controllers\Manager\DashboardController::class, 'index'])
             ->name('dashboard');
 
-        // Employee Resource (Excluding destroy since we use Archive)[cite: 2, 9]
+        // Employee Resource
         Route::resource('employees', \App\Http\Controllers\Manager\EmployeeController::class)
             ->except(['destroy']);
-
-        // Explicit Archive Route[cite: 2, 9]
         Route::patch('employees/{id}/archive', [\App\Http\Controllers\Manager\EmployeeController::class, 'archive'])
             ->name('employees.archive');
 
+        // Stock Requests (Baker → Manager approval)
+        Route::get('stock-requests', [StockRequestController::class, 'index'])
+            ->name('stockrequests.index');
+        Route::patch('stock-requests/{stockRequest}/approve', [StockRequestController::class, 'approve'])
+            ->name('stockrequests.approve');
+        Route::patch('stock-requests/{stockRequest}/reject', [StockRequestController::class, 'reject'])
+            ->name('stockrequests.reject');
+
         Route::get('inventory', [\App\Http\Controllers\Baker\InventoryController::class, 'index'])
             ->name('inventory');
-            
         Route::get('products', [\App\Http\Controllers\Manager\ProductController::class, 'index'])
             ->name('products');
+        Route::get('/reports', [\App\Http\Controllers\Manager\ReportController::class, 'index'])
+            ->name('reports');
     });
 
 // ── Seller ────────────────────────────────────────────────────────────────
@@ -73,7 +81,7 @@ Route::middleware(['auth', 'role:seller'])
         Route::get('neworder', [\App\Http\Controllers\Seller\NewOrderController::class, 'index'])
             ->name('neworder.index');
         Route::post('neworder', [\App\Http\Controllers\Seller\NewOrderController::class, 'store'])
-            ->name('neworder.store');    
+            ->name('neworder.store');
     });
 
 // ── Baker ─────────────────────────────────────────────────────────────────
@@ -92,4 +100,5 @@ Route::middleware(['auth', 'role:baker'])
         Route::get('orders/report', [\App\Http\Controllers\Baker\OrderReportController::class, 'index'])->name('orders.report');
         Route::get('orders/report/{order}', [\App\Http\Controllers\Baker\OrderReportController::class, 'show'])->name('orders.report.show');
     });
+
 require __DIR__.'/auth.php';

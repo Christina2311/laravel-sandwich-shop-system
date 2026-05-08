@@ -69,8 +69,6 @@ class DashboardController extends Controller
         }
 
         // ── Staff Performance Today ───────────────────────────────────
-        // Sellers  → count orders where seller_id = user id today
-        // Bakers   → count orders where baker_id  = user id today
         $sellers = DB::table('users')
             ->join('role_user', 'users.id', '=', 'role_user.user_id')
             ->join('roles',     'role_user.role_id', '=', 'roles.id')
@@ -109,6 +107,8 @@ class DashboardController extends Controller
         $staffPerformance = $sellers->merge($bakers)
             ->sortByDesc(fn($s) => $s->total_orders + $s->total_baked)
             ->values();
+
+        $pendingStockRequests = \App\Models\StockInRequest::where('status', 'pending')->count();
 
         return view('manager.dashboard', compact(
             'monthlyRevenue',

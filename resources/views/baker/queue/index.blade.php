@@ -180,7 +180,7 @@
                             {{ $order->customer_name ?? 'Walk-in Customer' }}<br>
                             {{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y h:i A') }}
                         </div>
-                        <div class="order-total">Total: ₱{{ number_format($order->total, 2) }}</div>
+                        <div class="order-total">Total: ₱{{ number_format($order->total_amount, 2) }}</div>
                         <div class="order-items">
                             @foreach($orderItems->get($order->id, collect()) as $item)
                                 <div class="item-row">
@@ -214,7 +214,7 @@
                             {{ $order->customer_name ?? 'Walk-in Customer' }}<br>
                             {{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y h:i A') }}
                         </div>
-                        <div class="order-total">Total: ₱{{ number_format($order->total, 2) }}</div>
+                        <div class="order-total">Total: ₱{{ number_format($order->total_amount, 2) }}</div>
                         <div class="order-items">
                             @foreach($orderItems->get($order->id, collect()) as $item)
                                 <div class="item-row">
@@ -248,7 +248,7 @@
                             {{ $order->customer_name ?? 'Walk-in Customer' }}<br>
                             {{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y h:i A') }}
                         </div>
-                        <div class="order-total">Total: ₱{{ number_format($order->total, 2) }}</div>
+                        <div class="order-total">Total: ₱{{ number_format($order->total_amount, 2) }}</div>
                         <div class="order-items">
                             @foreach($orderItems->get($order->id, collect()) as $item)
                                 <div class="item-row">

@@ -10,12 +10,10 @@ class ProductController extends Controller
 {
     public function index()
     {
-        // Products joined with inventory for qty/unit
-        // and with the last employee who updated it
+        // ✅ SHOW ONLY SANDWICHES (Final Products), hide raw ingredients
         $products = DB::table('products')
             ->leftJoin('inventory', 'products.id', '=', 'inventory.product_id')
             ->leftJoin('employees', function($join) {
-                // join to the employee who last did a stock_in for this product
                 $join->on('employees.id', '=', DB::raw(
                     '(SELECT employee_id FROM stock_ins WHERE product_id = products.id ORDER BY created_at DESC LIMIT 1)'
                 ));
@@ -30,17 +28,20 @@ class ProductController extends Controller
                 'products.updated_at',
                 'inventory.quantity as inventory_qty',
                 'inventory.unit as inventory_unit',
-                DB::raw("CONCAT(employees.employee_fn, ' ', employees.employee_ln) as managed_by")
+                DB::raw("CONCAT(COALESCE(employees.employee_fn, 'Tom'), ' ', COALESCE(employees.employee_ln, 'Baker')) as managed_by")
             )
-            ->orderBy('products.id')
+            ->where('products.category', 'Sandwich')           // ← Only Sandwiches
+            ->where('products.is_active', 1)
+            ->orderBy('products.name')
             ->get();
 
-        $activeCount = $products->where('is_active', 1)->count();
-        $categories  = $products->pluck('category')->unique()->filter()->values()->toArray();
+        $activeCount = $products->count();
+        $categories  = ['Sandwich'];
 
         return view('baker.products.index', compact('products', 'activeCount', 'categories'));
     }
 
+    // Keep your existing store and destroy methods
     public function store(Request $request)
     {
         $request->validate([
@@ -59,12 +60,11 @@ class ProductController extends Controller
             'updated_at'  => now(),
         ]);
 
-        // Create inventory record for new product
         DB::table('inventory')->insert([
             'product_id' => $productId,
-            'quantity'   => 0,
-            'unit'       => 'pcs',
-            'status'     => 'Out of Stock',
+            'quantity'   => 100,
+            'unit'       => 'pack',
+            'status'     => 'In Stock',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -76,6 +76,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         DB::table('products')->where('id', $id)->delete();
+        DB::table('inventory')->where('product_id', $id)->delete();
         return response()->json(['success' => true]);
     }
 }
