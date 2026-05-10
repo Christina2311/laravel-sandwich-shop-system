@@ -12,26 +12,27 @@ use Illuminate\Support\Facades\DB;
 class StockRequestController extends Controller
 {
     /**
-     * Show all pending stock requests to the manager.
+     * List all pending (and recent) baker stock-in requests.
      */
-    public function index()
+   public function index()
     {
-        $pendingRequests = StockInRequest::with(['product', 'employee'])
+        $pendingRequests = StockInRequest::with('product', 'employee')
             ->where('status', 'pending')
             ->orderByDesc('created_at')
             ->get();
 
-        $historyRequests = StockInRequest::with(['product', 'employee'])
+        $historyRequests = StockInRequest::with('product', 'employee')
             ->whereIn('status', ['approved', 'rejected'])
             ->orderByDesc('updated_at')
-            ->take(50)
+            ->limit(50)
             ->get();
 
         return view('manager.stockrequests.index', compact('pendingRequests', 'historyRequests'));
     }
 
     /**
-     * Approve a stock request — updates inventory and creates StockIn record.
+     * Approve a baker's stock-in request.
+     * This creates the actual StockIn record and updates inventory.
      */
     public function approve(Request $request, StockInRequest $stockRequest)
     {
@@ -39,8 +40,8 @@ class StockRequestController extends Controller
             return redirect()->back()->with('error', 'This request has already been processed.');
         }
 
-        DB::transaction(function () use ($request, $stockRequest) {
-            // Create actual StockIn record
+        DB::transaction(function () use ($stockRequest) {
+            // 1. Create the official StockIn record
             StockIn::create([
                 'employee_id' => $stockRequest->employee_id,
                 'product_id'  => $stockRequest->product_id,
@@ -50,7 +51,7 @@ class StockRequestController extends Controller
                 'note'        => $stockRequest->note,
             ]);
 
-            // Update or create inventory
+            // 2. Update or create inventory record
             $inventory = Inventory::where('product_id', $stockRequest->product_id)->first();
 
             if ($inventory) {
@@ -68,39 +69,37 @@ class StockRequestController extends Controller
                 ]);
             }
 
-            // Mark request as approved
-            $stockRequest->update([
-                'status'       => 'approved',
-                'manager_note' => $request->manager_note,
-            ]);
+            // 3. Mark request as approved
+            $stockRequest->update(['status' => 'approved']);
         });
 
-        return redirect()->route('manager.stock-requests.index')
-            ->with('success', 'Stock request approved and inventory updated.');
+        return redirect()->back()->with('success', 'Stock-in request approved and inventory updated.');
     }
 
     /**
-     * Reject a stock request.
+     * Reject a baker's stock-in request, with an optional manager note.
      */
     public function reject(Request $request, StockInRequest $stockRequest)
     {
-        $request->validate([
-            'manager_note' => 'nullable|string|max:500',
-        ]);
-
         if ($stockRequest->status !== 'pending') {
             return redirect()->back()->with('error', 'This request has already been processed.');
         }
+
+        $request->validate([
+            'manager_note' => 'nullable|string|max:500',
+        ]);
 
         $stockRequest->update([
             'status'       => 'rejected',
             'manager_note' => $request->manager_note,
         ]);
 
-        return redirect()->route('manager.stock-requests.index')
-            ->with('success', 'Stock request rejected.');
+        return redirect()->back()->with('success', 'Stock-in request rejected.');
     }
 
+    /**
+     * Determine inventory status based on quantity.
+     */
     private function resolveStatus(int $qty): string
     {
         if ($qty <= 0)  return 'Out of Stock';

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Seller;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -20,6 +21,7 @@ class NewOrderController extends Controller
     public function index()
     {
         $products = Product::where('is_active', true)
+            ->where('category', 'Sandwich')
             ->orderBy('name')
             ->get(['id', 'name', 'price', 'category']);
 
@@ -46,8 +48,6 @@ class NewOrderController extends Controller
         DB::transaction(function () use ($request) {
 
             // ── 1. Resolve or create the Customer ─────────────────────────
-            // Laravel's ConvertEmptyStringsToNull turns '' into null,
-            // so we use filled() — never pass null into NOT NULL columns.
             $customer = null;
 
             $fn    = filled($request->customer_fn) ? trim($request->customer_fn) : null;
@@ -56,12 +56,11 @@ class NewOrderController extends Controller
             $email = filled($request->email)        ? trim($request->email)       : null;
             $addr  = filled($request->address)      ? trim($request->address)     : null;
 
-            // Only create a customer record if a first name was given
             if ($fn !== null) {
                 $customer = Customer::firstOrCreate(
                     [
                         'customer_fn' => $fn,
-                        'customer_ln' => $ln ?? '',   // ln can be empty string
+                        'customer_ln' => $ln ?? '',
                     ],
                     [
                         'phone'   => $phone,
@@ -71,11 +70,9 @@ class NewOrderController extends Controller
                 );
             }
 
-            // ── 2. seller_id ──────────────────────────────────────────────
-            // The employees table has no user_id column, so we cannot look up
-            // the employee record from the logged-in user automatically.
-            // Set to null for now; assign via manager/admin tooling if needed.
-            $sellerId = null;
+            // ── 2. Resolve seller_id from the logged-in user ───────────────
+            // Looks up the employee record linked to the currently logged-in user.
+            $sellerId = Employee::where('user_id', Auth::id())->value('id');
 
             // ── 3. Calculate totals ────────────────────────────────────────
             $productIds = collect($request->items)->pluck('product_id')->unique();
@@ -94,8 +91,8 @@ class NewOrderController extends Controller
             // ── 4. Create the Order ────────────────────────────────────────
             $order = Order::create([
                 'customer_id'  => $customer?->id,
-                'seller_id'    => $sellerId,
-                'baker_id'     => null,
+                'seller_id'    => $sellerId,   // ← now correctly set
+                'baker_id'     => null,         // assigned when baker starts the order
                 'status'       => 'Pending',
                 'subtotal'     => $subtotal,
                 'tax'          => $tax,

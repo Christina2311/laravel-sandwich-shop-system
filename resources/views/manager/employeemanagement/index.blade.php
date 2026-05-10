@@ -28,137 +28,156 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--cream);
             color: var(--text-dark);
-            display: flex;
-            min-height: 100vh;
         }
 
-        /* ══════════════════════════════════
-           SIDEBAR
-        ══════════════════════════════════ */
+        /* SIDEBAR */
         .sidebar {
             width: 220px;
-            min-height: 100vh;
             background: var(--brown-dark);
+            min-height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            padding: 1.5rem 0 1rem;
-            flex-shrink: 0;
+            padding: 24px 14px 20px;
+            z-index: 100;
         }
 
+        /* Logo block */
         .sidebar-logo {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            margin-bottom: 0.6rem;
-        }
-
-        .sidebar-brand {
-            color: var(--white);
-            font-size: 0.85rem;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            text-align: center;
-            line-height: 1.3;
-        }
-
-        .sidebar-manager {
-            color: #D4A97A;
-            font-size: 0.75rem;
-            text-align: center;
-            margin-top: 0.25rem;
-            margin-bottom: 1.2rem;
-            padding: 0 0.5rem;
-        }
-
-        .sidebar-divider {
-            width: 80%;
-            border: none;
-            border-top: 1px solid rgba(255,255,255,0.15);
-            margin: 0.5rem 0 0.8rem;
-        }
-
-        .sidebar-section-label {
-            color: rgba(255,255,255,0.5);
-            font-size: 0.7rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            align-self: flex-start;
-            padding-left: 1.2rem;
-            margin-bottom: 0.4rem;
-        }
-
-        .sidebar-nav {
-            width: 100%;
             display: flex;
             flex-direction: column;
-            gap: 0.2rem;
-            padding: 0 0.8rem;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+            margin-bottom: 18px;
         }
 
-        .sidebar-nav a {
+        .sidebar-logo img.logo-img {
+            width: 500px;
+            height: 160px;
+            object-fit: contain;
+        }
+
+        .sidebar-logo .brand-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+
+        .sidebar-logo .manager-label {
+            font-size: 11px;
+            color: #C9A882;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .manager-label span {
+            color: var(--white);
+            font-weight: 700;
+        }
+
+        /* Section headings */
+        .nav-section-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #C9A882;
+            padding: 6px 8px 4px;
+            margin-top: 6px;
+        }
+
+        /* Nav items */
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 6px;
+        }
+
+        .sidebar-nav li a {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0.5rem 0.9rem;
-            border-radius: 7px;
-            color: rgba(255,255,255,0.8);
+            gap: 10px;
+            padding: 9px 12px;
+            border-radius: 8px;
+            color: #F5E6D3;
+            font-size: 13px;
+            font-weight: 600;
             text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            transition: background 0.15s, color 0.15s;
+            transition: background 0.18s;
         }
 
-        .sidebar-nav a:hover,
-        .sidebar-nav a.active {
-            background: rgba(255,255,255,0.15);
-            color: var(--white);
-        }
-
-        .sidebar-nav a img {
+        .sidebar-nav li a img {
             width: 18px;
             height: 18px;
-            filter: invert(1);
+            object-fit: contain;
             opacity: 0.85;
+            filter: brightness(0) invert(1);
         }
 
+        .sidebar-nav li a:hover {
+            background: #7A3D18;
+        }
+
+        .sidebar-nav li a.active {
+            background: #7A3D18;
+            color: var(--white);
+        }
+
+        .sidebar-nav li a.active img {
+            opacity: 1;
+        }
+
+        /* Logout button */
         .sidebar-logout {
             margin-top: auto;
-            width: 100%;
-            padding: 0 0.8rem;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255,255,255,0.12);
         }
 
-        .sidebar-logout a {
+        .btn-logout {
             display: flex;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0.5rem 0.9rem;
-            border-radius: 7px;
-            color: rgba(255,255,255,0.75);
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 9px 12px;
+            background: transparent;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            border-radius: 8px;
+            color: #F5E6D3;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.18s, border-color 0.18s;
             text-decoration: none;
-            font-size: 0.88rem;
-            font-weight: 500;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: background 0.15s;
         }
 
-        .sidebar-logout a:hover {
-            background: rgba(255,255,255,0.1);
-            color: var(--white);
-        }
-
-        .sidebar-logout a img {
-            width: 18px;
-            height: 18px;
-            filter: invert(1);
+        .btn-logout img {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
             opacity: 0.85;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.45);
+            color: var(--white);
         }
 
         /* ══════════════════════════════════
            MAIN CONTENT
         ══════════════════════════════════ */
         .main-content {
+            margin-left: 220px;
             flex: 1;
             padding: 2rem 2.5rem;
             overflow-y: auto;
@@ -320,7 +339,6 @@
 
         .emp-table tbody tr        { border-bottom: 1px solid var(--border); transition: background 0.15s; }
         .emp-table tbody tr:last-child { border-bottom: none; }
-        .emp-table tbody tr:hover  { background: #fdf0df; }
         .emp-table tbody td        { padding: 0.8rem 1.1rem; vertical-align: middle; }
 
         /* ── Badges ── */
@@ -431,13 +449,15 @@
 
         /* ── Responsive ── */
         @media (max-width: 768px) {
-            .sidebar { width: 60px; padding: 1rem 0; }
-            .sidebar-brand,
-            .sidebar-manager,
-            .sidebar-section-label,
-            .sidebar-nav a span { display: none; }
-            .sidebar-nav a { justify-content: center; padding: 0.6rem; }
-            .main-content { padding: 1.2rem; }
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                position: relative;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 1.2rem;
+            }
             .summary-grid { grid-template-columns: 1fr; }
             .controls-bar { flex-direction: column; align-items: stretch; }
             .search-wrapper { max-width: 100%; }
@@ -450,56 +470,77 @@
          SIDEBAR
     ══════════════════════════════ -->
     <aside class="sidebar">
-        <img src="{{ asset('images/sandwich_logo.png') }}" alt="CPAMA Logo" class="sidebar-logo">
-        <div class="sidebar-brand">CPAMA SANDWICH</div>
-        <div class="sidebar-manager">Manager: {{ auth()->user()->name ?? 'Chrisha Velasquez' }}</div>
 
-        <hr class="sidebar-divider">
-        <div class="sidebar-section-label">Main</div>
-        <nav class="sidebar-nav">
-            <a href="{{ route('manager.dashboard') }}">
-                <img src="{{ asset('images/dashboard_icon.png') }}" alt="">
-                <span>Dashboard</span>
-            </a>
-        </nav>
+        <!-- Logo + Brand -->
+        <div class="sidebar-logo">
+            <img src="{{ asset('images/sandwich_logo.png') }}" alt="CPAMA Sandwich Logo" class="logo-img" />
+            <div class="brand-name">CPAMA SANDWICH</div>
+            <div class="manager-label">
+                Manager: <span>{{ Auth::user()->name }}</span>
+            </div>
+        </div>
 
-        <hr class="sidebar-divider">
-        <div class="sidebar-section-label">Catalog</div>
-        <nav class="sidebar-nav">
-            <a href="#">
-                <img src="{{ asset('images/manager_inventory_icon.png') }}" alt="">
-                <span>Inventory</span>
-            </a>
-            <a href="#">
-                <img src="{{ asset('images/products_icon.png') }}" alt="">
-                <span>Products</span>
-            </a>
-            <a href="{{ route('manager.employees.index') }}" class="active">
-                <img src="{{ asset('images/employee_management_icon.png') }}" alt="">
-                <span>Employee Management</span>
-            </a>
-            <a href="#">
-                <img src="{{ asset('images/reports_icon.png') }}" alt="">
-                <span>Reports</span>
-            </a>
-        </nav>
+        <!-- Main Navigation -->
+        <div class="nav-section-title">Main</div>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="{{ route('manager.dashboard') }}">
+                    <img src="{{ asset('images/dashboard_icon.png') }}" alt="Dashboard" />
+                    Dashboard
+                </a>
+            </li>
+        </ul>
 
+        <!-- Catalog Navigation -->
+        <div class="nav-section-title">Catalog</div>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="{{ route('manager.inventory') }}">
+                    <img src="{{ asset('images/manager_inventory_icon.png') }}" alt="Inventory" />
+                    Inventory
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('manager.products') }}">
+                    <img src="{{ asset('images/products_icon.png') }}" alt="Products" />
+                    Products
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('manager.employees.index') }}" class="active">
+                    <img src="{{ asset('images/employee_management_icon.png') }}" alt="Employee Management" />
+                    Employee Management
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('manager.reports') }}">
+                    <img src="{{ asset('images/reports_icon.png') }}" alt="Reports" />
+                    Reports
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('manager.stockrequests.index') }}">
+                    <img src="{{ asset('images/notif_icon.png') }}" alt="Stock Requests" />
+                    Stock Requests
+                </a>
+            </li>
+        </ul>
+
+        <!-- Logout -->
         <div class="sidebar-logout">
-            <a href="{{ route('logout') }}"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <img src="{{ asset('images/logout_icon.png') }}" alt="">
-                <span>Logout</span>
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+            <form method="POST" action="{{ route('logout') }}">
                 @csrf
+                <button type="submit" class="btn-logout">
+                    <img src="{{ asset('images/logout_icon.png') }}" alt="Logout" />
+                    Logout
+                </button>
             </form>
         </div>
+
     </aside>
 
 
-    <!-- ══════════════════════════════
-         MAIN CONTENT
-    ══════════════════════════════ -->
+    <!-- MAIN CONTENT -->
     <main class="main-content">
 
         <!-- Alerts -->
@@ -604,20 +645,21 @@
                                 data-id="{{ $emp->id }}"
                                 data-fname="{{ $emp->employee_fn }}"
                                 data-lname="{{ $emp->employee_ln }}"
+                                data-barangay="{{ $emp->e_barangay }}"
                                 data-address="{{ $emp->e_city }}"
                                 data-contact="{{ $emp->e_contact_info }}"
-                                data-status="{{ $emp->is_active ? 'active' : 'inactive' }}"
+                                data-status="{{ $emp->is_active ? '1' : '0' }}"
                                 data-role="{{ $emp->roles->count() > 1 ? 'Seller & Baker' : $emp->roles->pluck('role_name')->first() }}"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editEmployeeModal">
-                                <img src="{{ asset('images/visibility_icon.png') }}" alt="Edit">
+                                <img src="{{ asset('images/edit_icon.png') }}" alt="Edit">
                             </button>
                             <button class="btn-action btn-archive-emp"
                                     data-id="{{ $emp->id }}"
                                     data-name="{{ $emp->employee_fn }}"
                                     data-bs-toggle="modal"
                                     data-bs-target="#archiveEmployeeModal">
-                                <img src="{{ asset('images/download_icon.png') }}" alt="Archive">
+                                <img src="{{ asset('images/archive_icon.png') }}" alt="Archive">
                             </button>
                         </td>
                     </tr>
@@ -659,16 +701,24 @@
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" name="name" class="form-control" placeholder="Enter full name" required>
+                            <label class="form-label">First Name</label>
+                            <input type="text" name="employee_fn" class="form-control" placeholder="Enter first name" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Address</label>
-                            <input type="text" name="address" class="form-control" placeholder="Enter address" required>
+                            <label class="form-label">Last Name</label>
+                            <input type="text" name="employee_ln" class="form-control" placeholder="Enter last name" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Contact Number</label>
-                            <input type="text" name="contact_number" class="form-control" placeholder="e.g. 09XXXXXXXXX" required>
+                            <label class="form-label">Barangay <span class="text-muted fw-normal">(optional)</span></label>
+                            <input type="text" name="e_barangay" class="form-control" placeholder="Enter barangay">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">City <span class="text-muted fw-normal">(optional)</span></label>
+                            <input type="text" name="e_city" class="form-control" placeholder="Enter city">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact Number <span class="text-muted fw-normal">(optional)</span></label>
+                            <input type="text" name="e_contact_info" class="form-control" placeholder="e.g. 09XXXXXXXXX">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Role</label>
@@ -682,19 +732,10 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Status</label>
-                            <select name="status" class="form-select" required>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="on-leave">On Leave</option>
+                            <select name="is_active" class="form-select" required>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
                             </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email <span class="text-muted fw-normal">(optional)</span></label>
-                            <input type="email" name="email" class="form-control" placeholder="employee@email.com">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Password <span class="text-muted fw-normal">(optional)</span></label>
-                            <input type="password" name="password" class="form-control" placeholder="Leave blank to auto-generate">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -723,16 +764,24 @@
                     <div class="modal-body">
                         <input type="hidden" id="edit_id" name="id">
                         <div class="mb-3">
-                            <label class="form-label">Full Name</label>
-                            <input type="text" id="edit_name" name="name" class="form-control" required>
+                            <label class="form-label">First Name</label>
+                            <input type="text" id="edit_fn" name="employee_fn" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Address</label>
-                            <input type="text" id="edit_address" name="address" class="form-control" required>
+                            <label class="form-label">Last Name</label>
+                            <input type="text" id="edit_ln" name="employee_ln" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Contact Number</label>
-                            <input type="text" id="edit_contact" name="contact_number" class="form-control" required>
+                            <label class="form-label">Barangay <span class="text-muted fw-normal">(optional)</span></label>
+                            <input type="text" id="edit_barangay" name="e_barangay" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">City <span class="text-muted fw-normal">(optional)</span></label>
+                            <input type="text" id="edit_city" name="e_city" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Contact Number <span class="text-muted fw-normal">(optional)</span></label>
+                            <input type="text" id="edit_contact" name="e_contact_info" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Role</label>
@@ -745,10 +794,9 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Status</label>
-                            <select id="edit_status" name="status" class="form-select" required>
-                                <option value="active">Active</option>
-                                <option value="inactive">Inactive</option>
-                                <option value="on-leave">On Leave</option>
+                            <select id="edit_status" name="is_active" class="form-select" required>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
                             </select>
                         </div>
                     </div>
@@ -842,12 +890,13 @@
         /* ── Edit Modal: populate fields ── */
         document.querySelectorAll('.btn-edit-emp').forEach(btn => {
             btn.addEventListener('click', function () {
-                // Map the data-fname and data-lname to the Full Name field[cite: 3, 8]
-                document.getElementById('edit_name').value = this.dataset.fname + ' ' + this.dataset.lname;
-                document.getElementById('edit_address').value = this.dataset.address;
+                document.getElementById('edit_fn').value      = this.dataset.fname;
+                document.getElementById('edit_ln').value      = this.dataset.lname;
+                document.getElementById('edit_barangay').value = this.dataset.barangay ?? '';
+                document.getElementById('edit_city').value    = this.dataset.address;
                 document.getElementById('edit_contact').value = this.dataset.contact;
-                document.getElementById('edit_status').value = this.dataset.status;
-                document.getElementById('edit_role').value = this.dataset.role;
+                document.getElementById('edit_status').value  = this.dataset.status;
+                document.getElementById('edit_role').value    = this.dataset.role;
 
                 const id = this.dataset.id;
                 document.getElementById('editEmployeeForm').action = `/manager/employees/${id}`;

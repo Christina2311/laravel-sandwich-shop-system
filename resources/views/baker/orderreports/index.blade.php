@@ -281,7 +281,6 @@
             <div class="nav-label" style="margin-top:20px;">Catalog</div>
             <ul class="nav-list">
                 <li><a href="{{ route('baker.inventorymanagement.index') }}"><img src="{{ asset('images/employee_inventory_icon.png') }}"> Inventory</a></li>
-                <li><a href="{{ route('baker.products') }}"><img src="{{ asset('images/products_icon.png') }}"> Products</a></li>
                 <li><a href="{{ route('baker.orders.report') }}" class="active"><img src="{{ asset('images/reports_icon.png') }}"> Orders Report</a></li>
             </ul>
         </div>

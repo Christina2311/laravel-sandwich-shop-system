@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Baker;
 
 use App\Http\Controllers\Controller;
+use App\Models\Employee;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class QueueController extends Controller
@@ -33,7 +35,7 @@ class QueueController extends Controller
             ->get()
             ->groupBy('order_id');
 
-        return view('baker.queue.index', compact('pending', 'preparing', 'completed', 'orderItems'));
+        return view('baker.queue', compact('pending', 'preparing', 'completed', 'orderItems'));
     }
 
     public function update(Request $request, Order $order)
@@ -42,8 +44,17 @@ class QueueController extends Controller
             'status' => ['required', 'in:Preparing,Ready'],
         ]);
 
-        $order->update(['status' => $request->status]);
+        $updateData = ['status' => $request->status];
 
-        return redirect()->route('baker.queue')->with('success', 'Order #' . str_pad($order->id, 4, '0', STR_PAD_LEFT) . ' updated to ' . $request->status . '.');
+        if ($request->status === 'Preparing' && is_null($order->baker_id)) {
+            $bakerId = Employee::where('user_id', Auth::id())->value('id');
+            $updateData['baker_id'] = $bakerId;
+        }
+
+        $order->update($updateData);
+
+        return redirect()
+            ->route('baker.queue')
+            ->with('success', 'Order #' . str_pad($order->id, 4, '0', STR_PAD_LEFT) . ' updated to ' . $request->status . '.');
     }
 }

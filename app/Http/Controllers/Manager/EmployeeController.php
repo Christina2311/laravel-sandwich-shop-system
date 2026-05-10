@@ -27,22 +27,22 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name'           => 'required|string|max:255',
-            'address'        => 'required|string|max:255',
-            'contact_number' => 'required|string|max:20',
+            'employee_fn'    => 'required|string|max:255',
+            'employee_ln'    => 'required|string|max:255',
+            'e_barangay'     => 'nullable|string|max:255',
+            'e_city'         => 'nullable|string|max:255',
+            'e_contact_info' => 'nullable|string|max:20',
             'role'           => 'required|string',
-            'status'         => 'required|string',
-            'email'          => 'nullable|email|unique:employees,email',
-            'password'       => 'nullable|string|min:8',
+            'is_active'      => 'required|boolean',
         ]);
 
         $employee = Employee::create([
-            'name'           => $request->name,
-            'address'        => $request->address,
-            'contact_number' => $request->contact_number,
-            'status'         => $request->status,
-            'email'          => $request->email,
-            'password'       => Hash::make($request->password ?? Str::random(12)),
+            'employee_fn'    => $request->employee_fn,
+            'employee_ln'    => $request->employee_ln,
+            'e_barangay'     => $request->e_barangay,
+            'e_city'         => $request->e_city,
+            'e_contact_info' => $request->e_contact_info,
+            'is_active'      => $request->is_active,
         ]);
 
         $employee->roles()->sync($this->resolveRoleIds($request->role));
@@ -56,18 +56,22 @@ class EmployeeController extends Controller
         $employee = Employee::findOrFail($id);
 
         $request->validate([
-            'name'           => 'required|string|max:255',
-            'address'        => 'required|string|max:255',
-            'contact_number' => 'required|string|max:20',
+            'employee_fn'    => 'required|string|max:255',
+            'employee_ln'    => 'required|string|max:255',
+            'e_barangay'     => 'nullable|string|max:255',
+            'e_city'         => 'nullable|string|max:255',
+            'e_contact_info' => 'nullable|string|max:20',
             'role'           => 'required|string',
-            'status'         => 'required|string',
+            'is_active'      => 'required|boolean',
         ]);
 
         $employee->update([
-            'name'           => $request->name,
-            'address'        => $request->address,
-            'contact_number' => $request->contact_number,
-            'status'         => $request->status,
+            'employee_fn'    => $request->employee_fn,
+            'employee_ln'    => $request->employee_ln,
+            'e_barangay'     => $request->e_barangay,
+            'e_city'         => $request->e_city,
+            'e_contact_info' => $request->e_contact_info,
+            'is_active'      => $request->is_active,
         ]);
 
         $employee->roles()->sync($this->resolveRoleIds($request->role));
@@ -79,7 +83,7 @@ class EmployeeController extends Controller
     public function archive($id)
     {
         $employee = Employee::findOrFail($id);
-        $employee->update(['status' => 'inactive']);
+        $employee->update(['is_active' => false]);
 
         return redirect()->route('manager.employees.index')
             ->with('success', 'Employee archived successfully.');
@@ -92,9 +96,9 @@ class EmployeeController extends Controller
     private function resolveRoleIds(string $roleString): array
     {
         $map = [
-            'Manager'      => ['Manager'],
-            'Seller'       => ['Seller'],
-            'Baker'        => ['Baker'],
+            'Manager'        => ['Manager'],
+            'Seller'         => ['Seller'],
+            'Baker'          => ['Baker'],
             'Seller & Baker' => ['Seller', 'Baker'],
         ];
 

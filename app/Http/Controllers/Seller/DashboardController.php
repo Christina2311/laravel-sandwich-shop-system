@@ -9,49 +9,23 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $today = today();
+        // ── Call GetDashboardStats procedure ───────────────────────────────
+        // Returns today_order_count, total_customers,
+        //         low_stock_count, total_revenue_today  in one query.
+        $stats = DB::select('CALL GetDashboardStats()')[0];
 
-        // Today's order count
-        $todayOrderCount = DB::table('orders')
-            ->whereDate('created_at', $today)
-            ->count();
+        $todayOrderCount = $stats->today_order_count;
+        $totalCustomers  = $stats->total_customers;
+        $lowStockCount   = $stats->low_stock_count;
+        $totalRevenue    = $stats->total_revenue_today;
 
-        // Total unique customers
-        $totalCustomers = DB::table('customers')->count();
+        // ── Call GetRecentOrders procedure ─────────────────────────────────
+        // Returns last 50 orders with customer_name (Walk-in included).
+        $recentOrders = collect(DB::select('CALL GetRecentOrders()'));
 
-        // Low stock items (quantity <= 20)
-        $lowStockCount = DB::table('inventory')
-            ->where('quantity', '<=', 20)
-            ->count();
-
-        // Total revenue today (completed orders only)
-        $totalRevenue = DB::table('orders')
-            ->whereDate('created_at', $today)
-            ->where('status', 'completed')
-            ->sum('total_amount');
-
-        // Recent orders with customer name
-        $recentOrders = DB::table('orders')
-            ->join('customers', 'orders.customer_id', '=', 'customers.id')
-            ->select(
-                'orders.id',
-                DB::raw("CONCAT(customers.customer_fn, ' ', customers.customer_ln) as customer_name"),
-                'orders.status',
-                'orders.total_amount'
-            )
-            ->orderBy('orders.created_at', 'desc')
-            ->limit(50)
-            ->get();
-
-        // Top products today by quantity sold
-        $topProducts = DB::table('order_items')
-            ->join('orders', 'order_items.order_id', '=', 'orders.id')
-            ->join('products', 'order_items.product_id', '=', 'products.id')
-            ->whereDate('orders.created_at', $today)
-            ->select('products.name', DB::raw('SUM(order_items.quantity) as total_sold'))
-            ->groupBy('products.id', 'products.name')
-            ->orderByDesc('total_sold')
-            ->get();
+        // ── Call GetTopProductsToday procedure ─────────────────────────────
+        // Returns top-selling products for today ranked by qty sold.
+        $topProducts = collect(DB::select('CALL GetTopProductsToday()'));
 
         return view('seller.dashboard.index', compact(
             'todayOrderCount',

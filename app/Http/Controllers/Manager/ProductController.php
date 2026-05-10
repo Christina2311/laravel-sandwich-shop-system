@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Baker;
+namespace App\Http\Controllers\Manager;          // ← changed from Baker
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,7 +10,6 @@ class ProductController extends Controller
 {
     public function index()
     {
-        // ✅ SHOW ONLY SANDWICHES (Final Products), hide raw ingredients
         $products = DB::table('products')
             ->leftJoin('inventory', 'products.id', '=', 'inventory.product_id')
             ->leftJoin('employees', function($join) {
@@ -25,12 +24,12 @@ class ProductController extends Controller
                 'products.price',
                 'products.category',
                 'products.is_active',
-                'products.updated_at',
+                DB::raw('products.updated_at as product_updated_at'),
                 'inventory.quantity as inventory_qty',
                 'inventory.unit as inventory_unit',
-                DB::raw("CONCAT(COALESCE(employees.employee_fn, 'Tom'), ' ', COALESCE(employees.employee_ln, 'Baker')) as managed_by")
+                DB::raw("CONCAT(COALESCE(employees.employee_fn, 'N/A'), ' ', COALESCE(employees.employee_ln, '')) as managed_by")
             )
-            ->where('products.category', 'Sandwich')           // ← Only Sandwiches
+            ->where('products.category', 'Sandwich')
             ->where('products.is_active', 1)
             ->orderBy('products.name')
             ->get();
@@ -38,10 +37,9 @@ class ProductController extends Controller
         $activeCount = $products->count();
         $categories  = ['Sandwich'];
 
-        return view('baker.products.index', compact('products', 'activeCount', 'categories'));
+        return view('manager.products.index', compact('products', 'activeCount', 'categories'));  // ← changed from baker.products.index
     }
 
-    // Keep your existing store and destroy methods
     public function store(Request $request)
     {
         $request->validate([
@@ -50,7 +48,7 @@ class ProductController extends Controller
             'category' => 'required|string|max:100',
         ]);
 
-        $productId = DB::table('products')->insertGetId([
+        DB::table('products')->insertGetId([
             'name'        => $request->name,
             'description' => $request->description,
             'price'       => $request->price,
@@ -60,23 +58,39 @@ class ProductController extends Controller
             'updated_at'  => now(),
         ]);
 
-        DB::table('inventory')->insert([
-            'product_id' => $productId,
-            'quantity'   => 100,
-            'unit'       => 'pack',
-            'status'     => 'In Stock',
-            'created_at' => now(),
-            'updated_at' => now(),
+        // No inventory record created here.
+        // Stock will be added through the Inventory → Stock In flow.
+
+        return redirect()->route('manager.products')
+                         ->with('success', 'Product added successfully! Use Stock In to add inventory.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'price'    => 'required|numeric|min:0',
+            'category' => 'required|string|max:100',
         ]);
 
-        return redirect()->route('baker.products.index')
-                         ->with('success', 'Product added successfully!');
+        DB::table('products')->where('id', $id)->update([
+            'name'        => $request->name,
+            'description' => $request->description,
+            'price'       => $request->price,
+            'category'    => $request->category,
+            'updated_at'  => now(),
+        ]);
+
+        return redirect()->route('manager.products')
+                         ->with('success', 'Product updated successfully!');
     }
 
     public function destroy($id)
     {
         DB::table('products')->where('id', $id)->delete();
         DB::table('inventory')->where('product_id', $id)->delete();
-        return response()->json(['success' => true]);
+
+        return redirect()->route('manager.products')
+                         ->with('success', 'Product deleted successfully!');
     }
 }

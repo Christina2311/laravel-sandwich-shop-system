@@ -1,4 +1,3 @@
-{{-- resources/views/manager/index.blade.php --}}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +21,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 
     <style>
-        /* ─── CSS Variables ────────────────────────────────────────── */
         :root {
             --sidebar-bg:      #5C2D0E;
             --sidebar-hover:   #7A3D18;
@@ -69,7 +67,7 @@
             padding: 36px 36px 60px;
         }
 
-        /* ─── Sidebar ───────────────────────────────────────────────── */
+        /* Sidebar  */
         .sidebar {
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
@@ -95,11 +93,9 @@
         }
 
         .sidebar-logo img.logo-img {
-            width: 80px;
-            height: 80px;
+            width: 500px;
+            height: 160px;
             object-fit: contain;
-            border-radius: 50%;
-            border: 3px solid rgba(255,255,255,0.2);
         }
 
         .sidebar-logo .brand-name {
@@ -402,13 +398,13 @@
         <div class="nav-section-title">Catalog</div>
         <ul class="sidebar-nav">
             <li>
-                <a href="#">
+                <a href="{{ route('manager.inventory') }}">
                     <img src="{{ asset('images/manager_inventory_icon.png') }}" alt="Inventory" />
                     Inventory
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{ route('manager.products') }}">
                     <img src="{{ asset('images/products_icon.png') }}" alt="Products" />
                     Products
                 </a>

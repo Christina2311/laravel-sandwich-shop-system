@@ -55,7 +55,6 @@ Route::middleware(['auth', 'role:manager'])
         Route::patch('employees/{id}/archive', [\App\Http\Controllers\Manager\EmployeeController::class, 'archive'])
             ->name('employees.archive');
 
-        // Stock Requests (Baker → Manager approval)
         Route::get('stock-requests', [StockRequestController::class, 'index'])
             ->name('stockrequests.index');
         Route::patch('stock-requests/{stockRequest}/approve', [StockRequestController::class, 'approve'])
@@ -63,11 +62,20 @@ Route::middleware(['auth', 'role:manager'])
         Route::patch('stock-requests/{stockRequest}/reject', [StockRequestController::class, 'reject'])
             ->name('stockrequests.reject');
 
-        Route::get('inventory', [\App\Http\Controllers\Baker\InventoryController::class, 'index'])
+        // Inventory
+        Route::get('inventory', [\App\Http\Controllers\Manager\InventoryController::class, 'index'])
             ->name('inventory');
-        Route::get('products', [\App\Http\Controllers\Manager\ProductController::class, 'index'])
-            ->name('products');
-        Route::get('/reports', [\App\Http\Controllers\Manager\ReportController::class, 'index'])
+        Route::post('inventory/stock-in', [\App\Http\Controllers\Manager\InventoryController::class, 'storeStockIn'])
+            ->name('inventory.storeStockIn');
+        Route::post('inventory/stock-out', [\App\Http\Controllers\Manager\InventoryController::class, 'storeStockOut'])
+            ->name('inventory.storeStockOut');
+
+        // Products & Reports
+        Route::get('products', [\App\Http\Controllers\Manager\ProductController::class, 'index'])->name('products');
+        Route::post('products', [\App\Http\Controllers\Manager\ProductController::class, 'store'])->name('products.store');
+        Route::patch('products/{id}', [\App\Http\Controllers\Manager\ProductController::class, 'update'])->name('products.update');
+        Route::delete('products/{id}', [\App\Http\Controllers\Manager\ProductController::class, 'destroy'])->name('products.destroy');
+        Route::get('reports', [\App\Http\Controllers\Manager\ReportController::class, 'index'])
             ->name('reports');
     });
 
@@ -93,10 +101,9 @@ Route::middleware(['auth', 'role:baker'])
         Route::patch('queue/{order}', [\App\Http\Controllers\Baker\QueueController::class, 'update'])->name('queue.update');
 
         Route::get('inventory', [InventoryController::class, 'index'])->name('inventorymanagement.index');
-        Route::post('/inventory/stock-in', [InventoryController::class, 'storeStockIn'])->name('inventory.storeStockIn');
-        Route::post('/inventory/stock-out', [InventoryController::class, 'storeStockOut'])->name('inventory.storeStockOut');
+        Route::post('inventory/stock-in', [InventoryController::class, 'storeStockIn'])->name('inventory.storeStockIn');
+        Route::post('inventory/stock-out', [InventoryController::class, 'storeStockOut'])->name('inventory.storeStockOut');
 
-        Route::get('products', [\App\Http\Controllers\Baker\ProductController::class, 'index'])->name('products');
         Route::get('orders/report', [\App\Http\Controllers\Baker\OrderReportController::class, 'index'])->name('orders.report');
         Route::get('orders/report/{order}', [\App\Http\Controllers\Baker\OrderReportController::class, 'show'])->name('orders.report.show');
     });

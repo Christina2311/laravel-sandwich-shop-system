@@ -24,6 +24,16 @@
             --card-radius:     14px;
             --input-radius:    8px;
             --font-main:       'Segoe UI', system-ui, sans-serif;
+
+            /* ── Missing variables fixed ── */
+            --white:           #ffffff;
+            --cream:           #faf3e0;
+            --cream-dark:      #e8dcc8;
+            --brown:           #5a2d0c;
+            --amber-dark:      #b07010;
+            --text-dark:       #2c1a0e;
+            --text-mid:        #5a4030;
+            --text-light:      #9a7a5a;
         }
 
         /* ── Layout ───────────────────────────────────────────────────── */
@@ -160,14 +170,10 @@
             padding: 1.25rem 1.5rem;
             border: 1.5px solid var(--cream-dark);
             display: flex;
-            align-items: flex-start;
+            align-items: center;
+            justify-content: space-between;
             gap: 1rem;
             transition: transform .2s, box-shadow .2s;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(92,51,23,.1);
         }
 
         .stat-icon-wrap {
@@ -192,13 +198,19 @@
         .stat-icon-wrap.green { background: rgba(40,160,80,.1); }
         .stat-icon-wrap.red   { background: rgba(200,50,50,.1); }
 
-        .stat-info { flex: 1; }
+        .stat-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
 
         .stat-label {
             font-size: .8rem;
             font-weight: 800;
             color: var(--text-light);
             margin-bottom: .2rem;
+            text-align: right;
         }
 
         .stat-value {
@@ -207,6 +219,7 @@
             letter-spacing: 1px;
             color: var(--text-dark);
             line-height: 1;
+            text-align: right;
         }
 
         .stat-value .peso { color: var(--amber-dark); font-size: 1.4rem; }
@@ -274,7 +287,6 @@
         }
 
         .orders-table tbody tr:last-child td { border-bottom: none; }
-        .orders-table tbody tr:hover td { background: var(--cream); }
 
         .orders-table tbody tr.empty-row td { height: 38px; }
 
@@ -355,7 +367,6 @@
         }
 
         .product-item:last-child { border-bottom: none; }
-        .product-item:hover { background: var(--cream); }
 
         .product-name {
             font-size: .88rem;

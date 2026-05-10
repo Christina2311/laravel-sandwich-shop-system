@@ -9,19 +9,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --brown:       #5D3A2E;
-            --brown-dark:  #3E2720;
-            --amber:       #F4A300;
-            --main-bg:     #FFFCF2;
-            --accent-yellow: #FEF3C7;
-            --btn-green:   #27AE60;
-            --btn-red:     #E74C3C;
-            --sidebar-w:   220px;
-            --border:      #E5E7EB;
-            --text-dark:   #2C2C2C;
-            --text-muted:  #888;
-            --font:        'Nunito', sans-serif;
+       :root {
+            --sidebar-bg:      #5C2D0E;
+            --sidebar-hover:   #7A3D18;
+            --sidebar-active:  #7A3D18;
+            --sidebar-text:    #F5E6D3;
+            --sidebar-muted:   #C9A882;
+            --sidebar-border:  rgba(255,255,255,0.12);
+            --sidebar-width:   220px;
+
+            --page-bg:         #F7F3EE;
+            --main-bg:         #F7F3EE;
+            --card-bg:         #FFFFFF;
+            --card-border:     #EDE5D8;
+            --border:          #EDE5D8;
+            --text-dark:       #2C2C2C;
+            --text-muted:      #9A8776;
+            --brown:           #5C2D0E;
+            --accent-yellow:   #FAF3E0;
+            --btn-green:       #22C55E;
+            --btn-red:         #EF4444;
+            --font:            'Nunito', sans-serif;
         }
 
         *, *::before, *::after { box-sizing: border-box; }
@@ -35,126 +43,152 @@
 
         .wrapper { display: flex; min-height: 100vh; }
 
-        /* ── Sidebar ── */
+        /* Sidebar  */
         .sidebar {
-            width: var(--sidebar-w);
+            width: var(--sidebar-width);
+            background: var(--sidebar-bg);
             min-height: 100vh;
-            background: var(--brown);
+            position: fixed;
+            top: 0;
+            left: 0;
             display: flex;
             flex-direction: column;
-            position: fixed;
-            top: 0; left: 0;
+            padding: 24px 14px 20px;
             z-index: 100;
         }
 
-        .sidebar-brand {
+        /* Logo block */
+        .sidebar-logo {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 1.4rem 1rem 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            gap: 8px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid var(--sidebar-border);
+            margin-bottom: 18px;
         }
 
-        .sidebar-brand img {
-            width: 100px;
-            height: 100px;
+        .sidebar-logo img.logo-img {
+            width: 500px;
+            height: 160px;
             object-fit: contain;
         }
 
-        .brand-name {
-            font-weight: 900;
-            font-size: 0.9rem;
-            color: var(--amber);
-            margin-top: 0.4rem;
-            letter-spacing: 1px;
-            text-align: center;
-        }
-
-        .brand-sub {
-            font-size: 0.72rem;
-            color: rgba(255,255,255,0.5);
-            font-weight: 700;
-            text-align: center;
-            margin-top: 2px;
-        }
-
-        .nav-section { padding: 0.8rem 0.75rem 0.2rem; }
-
-        .nav-label {
-            font-size: 0.65rem;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.3);
+        .sidebar-logo .brand-name {
+            font-size: 13px;
             font-weight: 800;
-            padding-left: 8px;
-            margin-bottom: 4px;
-            letter-spacing: 1.2px;
+            color: #FFFFFF;
+            letter-spacing: 0.5px;
+            text-align: center;
         }
 
-        .nav-list { list-style: none; padding: 0; margin: 0 0 4px; }
+        .sidebar-logo .manager-label {
+            font-size: 11px;
+            color: var(--sidebar-muted);
+            text-align: center;
+            line-height: 1.4;
+        }
 
-        .nav-list a {
+        .manager-label span {
+            color: #FFFFFF;
+            font-weight: 700;
+        }
+
+        /* Section headings */
+        .nav-section-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--sidebar-muted);
+            padding: 6px 8px 4px;
+            margin-top: 6px;
+        }
+
+        /* Nav items */
+        .sidebar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 6px;
+        }
+
+        .sidebar-nav li a {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 9px 10px;
+            padding: 9px 12px;
             border-radius: 8px;
-            color: rgba(255,255,255,0.65);
+            color: var(--sidebar-text);
+            font-size: 13px;
+            font-weight: 600;
             text-decoration: none;
-            font-weight: 700;
-            font-size: 0.85rem;
-            transition: background 0.18s, color 0.18s;
+            transition: background 0.18s;
         }
 
-        .nav-list a:hover { background: rgba(255,255,255,0.07); color: #fff; }
-
-        .nav-list a.active { background: var(--amber); color: var(--brown-dark); }
-
-        .nav-list img {
-            width: 17px; height: 17px;
+        .sidebar-nav li a img {
+            width: 18px;
+            height: 18px;
             object-fit: contain;
+            opacity: 0.85;
             filter: brightness(0) invert(1);
-            opacity: 0.7;
         }
 
-        .nav-list a.active img { filter: brightness(0); opacity: 1; }
-
-        .sidebar-divider {
-            height: 1px;
-            background: rgba(255,255,255,0.08);
-            margin: 0.5rem 0.75rem;
+        .sidebar-nav li a:hover {
+            background: var(--sidebar-hover);
         }
 
-        .sidebar-footer { margin-top: auto; padding: 1rem; }
+        .sidebar-nav li a.active {
+            background: var(--sidebar-active);
+            color: #FFFFFF;
+        }
+
+        .sidebar-nav li a.active img {
+            opacity: 1;
+        }
+
+        /* Logout button */
+        .sidebar-logout {
+            margin-top: auto;
+            padding-top: 14px;
+            border-top: 1px solid var(--sidebar-border);
+        }
 
         .btn-logout {
-            width: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 9px;
+            width: 100%;
+            padding: 9px 12px;
             background: transparent;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1.5px solid rgba(255,255,255,0.25);
             border-radius: 8px;
-            color: rgba(255,255,255,0.6);
+            color: var(--sidebar-text);
             font-family: var(--font);
-            font-size: 0.85rem;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.18s;
+            transition: background 0.18s, border-color 0.18s;
+            text-decoration: none;
         }
 
-        .btn-logout:hover { background: rgba(255,255,255,0.06); color: #fff; }
-
         .btn-logout img {
-            width: 15px;
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
             filter: brightness(0) invert(1);
-            opacity: 0.7;
+            opacity: 0.85;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.45);
+            color: #FFFFFF;
         }
 
         /* ── Main Content ── */
         .main-content {
-            margin-left: var(--sidebar-w);
+            margin-left: var(--sidebar-width);
             flex: 1;
             padding: 36px 36px 60px;
         }
@@ -266,11 +300,7 @@
         .tab-pane { display: none; }
         .tab-pane.active { display: block; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
 
         thead tr { background: var(--accent-yellow); }
 
@@ -304,13 +334,9 @@
             font-weight: 700;
         }
 
-        .inv-in    { background: #D4EDDA; color: #155724; }
-        .inv-low   { background: #FFF3CD; color: #856404; }
-        .inv-out   { background: #F8D7DA; color: #721C24; }
-
-        .req-pending  { background: #FFF3CD; color: #856404; }
-        .req-approved { background: #D4EDDA; color: #155724; }
-        .req-rejected { background: #F8D7DA; color: #721C24; }
+        .inv-in  { background: #D4EDDA; color: #155724; }
+        .inv-low { background: #FFF3CD; color: #856404; }
+        .inv-out { background: #F8D7DA; color: #721C24; }
 
         /* ── Modals ── */
         .modal-overlay {
@@ -326,7 +352,7 @@
         .modal-overlay.open { display: flex; }
 
         .modal-box {
-            background: var(--main-bg);
+            background: var(--card-bg);
             padding: 30px;
             border-radius: 20px;
             width: 520px;
@@ -402,84 +428,84 @@
             text-decoration: underline;
             margin-top: 6px;
         }
-
-        /* Pending notice */
-        .pending-notice {
-            background: #FFF3CD;
-            border: 1px solid #FECB2F;
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-size: 12px;
-            font-weight: 700;
-            color: #856404;
-            margin-bottom: 14px;
-        }
     </style>
 </head>
 <body>
 <div class="wrapper">
 
-    {{-- Sidebar --}}
+    <!-- Sidebar - SAME AS DASHBOARD -->
     <aside class="sidebar">
-        <div class="sidebar-brand">
-            <img src="{{ asset('images/sandwich_logo.png') }}" alt="Logo">
+
+        {{-- Logo + Brand --}}
+        <div class="sidebar-logo">
+            <img
+                src="{{ asset('images/sandwich_logo.png') }}"
+                alt="CPAMA Sandwich Logo"
+                class="logo-img"
+            />
             <div class="brand-name">CPAMA SANDWICH</div>
-            <div class="brand-sub">Baker: {{ auth()->user()->name }}</div>
+            <div class="manager-label">
+                Manager: <span>{{ Auth::user()->name }}</span>
+            </div>
         </div>
 
-        <div class="nav-section">
-            <div class="nav-label">Main</div>
-            <ul class="nav-list">
-                <li>
-                    <a href="{{ route('baker.queue') }}">
-                        <img src="{{ asset('images/baker_queue_icon.png') }}" alt="Queue">
-                        Baker Queue
-                    </a>
-                </li>
-            </ul>
+        {{-- Main Navigation --}}
+        <div class="nav-section-title">Main</div>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="{{ route('manager.dashboard') }}">
+                    <img src="{{ asset('images/dashboard_icon.png') }}" alt="Dashboard" />
+                    Dashboard
+                </a>
+            </li>
+        </ul>
 
-            <div class="nav-label" style="margin-top:14px;">Catalog</div>
-            <ul class="nav-list">
-                <li>
-                    <a href="{{ route('baker.inventorymanagement.index') }}" class="active">
-                        <img src="{{ asset('images/employee_inventory_icon.png') }}" alt="Inventory">
-                        Inventory
-                    </a>
-                </li>
-                <li>
-                <li>
-                    <a href="{{ route('baker.orders.report') }}">
-                        <img src="{{ asset('images/reports_icon.png') }}" alt="Orders Report">
-                        Orders Report
-                    </a>
-                </li>
-            </ul>
-        </div>
+        {{-- Catalog Navigation --}}
+        <div class="nav-section-title">Catalog</div>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="{{ route('manager.inventory') }}" class="active">
+                    <img src="{{ asset('images/manager_inventory_icon.png') }}" alt="Inventory" />
+                    Inventory
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('manager.products') }}">
+                    <img src="{{ asset('images/products_icon.png') }}" alt="Products" />
+                    Products
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('manager.employees.index') }}">
+                    <img src="{{ asset('images/employee_management_icon.png') }}" alt="Employee Management" />
+                    Employee Management
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('manager.reports') }}">
+                    <img src="{{ asset('images/reports_icon.png') }}" alt="Reports" />
+                    Reports
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('manager.stockrequests.index') }}">
+                    <img src="{{ asset('images/notif_icon.png') }}" alt="Stock Requests" />
+                    Stock Requests
+                </a>
+            </li>
+        </ul>
 
-        @if(auth()->user()->hasRole('seller'))
-        <div class="sidebar-divider"></div>
-        <div class="nav-section">
-            <div class="nav-label">Switch Role</div>
-            <ul class="nav-list">
-                <li>
-                    <a href="{{ route('seller.dashboard') }}">
-                        <img src="{{ asset('images/dashboard_icon.png') }}" alt="Seller">
-                        Go to Seller
-                    </a>
-                </li>
-            </ul>
-        </div>
-        @endif
-
-        <div class="sidebar-footer">
+        {{-- Logout --}}
+        <div class="sidebar-logout">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="btn-logout">
-                    <img src="{{ asset('images/logout_icon.png') }}" alt="Logout">
+                    <img src="{{ asset('images/logout_icon.png') }}" alt="Logout" />
                     Logout
                 </button>
             </form>
         </div>
+
     </aside>
 
     {{-- Main Content --}}
@@ -567,51 +593,32 @@
                 </table>
             </div>
 
-            {{-- ── STOCK IN (Requests) ── --}}
+            {{-- ── STOCK IN ── --}}
             <div id="tab-stockin" class="tab-pane">
-                <div style="padding: 16px 20px 0;">
-                    <div class="pending-notice">
-                        ⚠ Stock In requests must be approved by a manager before inventory is updated.
-                    </div>
-                </div>
                 <table>
                     <thead>
                         <tr>
-                            <th>Request ID</th>
+                            <th>ID</th>
                             <th>Product Name</th>
                             <th>Qty</th>
                             <th>Supplier</th>
                             <th>Date</th>
                             <th>Note</th>
-                            <th>Status</th>
-                            <th>Manager Note</th>
                         </tr>
                     </thead>
                     <tbody id="stockInBody">
-                        @forelse($myRequests as $req)
-                        <tr data-name="{{ strtolower($req->product->name ?? '') }}"
-                            data-category="{{ strtolower($req->product->category ?? '') }}">
-                            <td>#{{ $req->id }}</td>
-                            <td>{{ $req->product->name ?? 'N/A' }}</td>
-                            <td>{{ $req->quantity }}</td>
-                            <td>{{ $req->supplier ?? '—' }}</td>
-                            <td>{{ \Carbon\Carbon::parse($req->date)->format('M d, Y') }}</td>
-                            <td>{{ $req->note ?? '—' }}</td>
-                            <td>
-                                @php
-                                    $rc = match($req->status) {
-                                        'pending'  => 'req-pending',
-                                        'approved' => 'req-approved',
-                                        'rejected' => 'req-rejected',
-                                        default    => ''
-                                    };
-                                @endphp
-                                <span class="badge-inv {{ $rc }}">{{ ucfirst($req->status) }}</span>
-                            </td>
-                            <td>{{ $req->manager_note ?? '—' }}</td>
+                        @forelse($stockIns as $in)
+                        <tr data-name="{{ strtolower($in->product->name ?? '') }}"
+                            data-category="{{ strtolower($in->product->category ?? '') }}">
+                            <td>#{{ $in->id }}</td>
+                            <td>{{ $in->product->name ?? 'N/A' }}</td>
+                            <td>{{ $in->quantity }}</td>
+                            <td>{{ $in->supplier ?? '—' }}</td>
+                            <td>{{ \Carbon\Carbon::parse($in->date)->format('M d, Y') }}</td>
+                            <td>{{ $in->note ?? '—' }}</td>
                         </tr>
                         @empty
-                        <tr class="empty-row"><td colspan="8">No stock in requests yet.</td></tr>
+                        <tr class="empty-row"><td colspan="6">No stock in records yet.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -654,22 +661,22 @@
 </div>{{-- /.wrapper --}}
 
 
-{{-- ── STOCK IN REQUEST MODAL ── --}}
+{{-- ── STOCK IN MODAL ── --}}
 <div id="stockInModal" class="modal-overlay">
     <div class="modal-box">
-        <div class="modal-title">Stock In Request</div>
-        <div class="pending-notice">
-            This will be sent to the manager for approval before stock is updated.
-        </div>
-        <form action="{{ route('baker.inventory.storeStockIn') }}" method="POST">
+        <div class="modal-title">Stock In</div>
+        <form action="{{ route('manager.inventory.storeStockIn') }}" method="POST">
             @csrf
+            {{-- Employee ID is auto-filled and hidden --}}
             <input type="hidden" name="employee_id" value="{{ auth()->user()->employee?->id }}">
             <div class="form-grid">
                 <div class="form-group">
                     <label>Ingredient/Product Name</label>
+                    {{-- Combobox: pick existing or type a new name --}}
                     <input
                         list="productListIn"
                         name="product_name"
+                        id="productNameIn"
                         placeholder="Select or type a name..."
                         autocomplete="off"
                         required
@@ -698,8 +705,8 @@
                     <textarea name="note" rows="2" placeholder="Additional note.."></textarea>
                 </div>
             </div>
-            <button type="submit" class="submit-btn" style="background: var(--brown);">
-                Submit Request
+            <button type="submit" class="submit-btn" style="background: var(--btn-green);">
+                Record Stock In
             </button>
             <button type="button" class="cancel-lnk" onclick="closeModal('stockInModal')">Cancel</button>
         </form>
@@ -711,8 +718,9 @@
 <div id="stockOutModal" class="modal-overlay">
     <div class="modal-box">
         <div class="modal-title">Stock Out Form</div>
-        <form action="{{ route('baker.inventory.storeStockOut') }}" method="POST">
+        <form action="{{ route('manager.inventory.storeStockOut') }}" method="POST">
             @csrf
+            {{-- Employee ID is auto-filled and hidden --}}
             <input type="hidden" name="employee_id" value="{{ auth()->user()->employee?->id }}">
             <div class="form-grid">
                 <div class="form-group">
@@ -720,6 +728,7 @@
                     <input
                         list="productListOut"
                         name="product_name"
+                        id="productNameOut"
                         placeholder="Select or type a name..."
                         autocomplete="off"
                         required
@@ -766,7 +775,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // ── Tab switching ──
     function switchTab(tab, btn) {
         document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-links button').forEach(b => b.classList.remove('active'));
@@ -776,7 +784,7 @@
         const area = document.getElementById('tabAction');
         if (tab === 'stockin') {
             area.innerHTML = `<button class="btn-tab-action btn-green"
-                onclick="openModal('stockInModal')">+ Request Stock In</button>`;
+                onclick="openModal('stockInModal')">+ Stock In</button>`;
         } else if (tab === 'stockout') {
             area.innerHTML = `<button class="btn-tab-action btn-red"
                 onclick="openModal('stockOutModal')">− Stock Out</button>`;
@@ -787,18 +795,15 @@
         applyFilters();
     }
 
-    // ── Modals ──
     function openModal(id)  { document.getElementById(id).classList.add('open'); }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-    // Close on outside click
     document.querySelectorAll('.modal-overlay').forEach(m => {
         m.addEventListener('click', function(e) {
             if (e.target === this) closeModal(this.id);
         });
     });
 
-    // ── Search + Category filter ──
     function applyFilters() {
         const query    = document.getElementById('globalSearch').value.toLowerCase().trim();
         const category = document.getElementById('categoryFilter').value.toLowerCase();
@@ -807,7 +812,7 @@
 
         active.querySelectorAll('tbody tr:not(.empty-row)').forEach(row => {
             const nameMatch     = (row.dataset.name || '').includes(query);
-            const categoryMatch = !category || (row.dataset.category || '') === category;
+            const categoryMatch = !category || (row.dataset.category || '').includes(category);
             row.style.display   = nameMatch && categoryMatch ? '' : 'none';
         });
     }

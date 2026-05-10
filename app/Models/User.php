@@ -29,38 +29,28 @@ class User extends Authenticatable
         ];
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Roles relationship  (many-to-many)
-    |--------------------------------------------------------------------------
-    |
-    | Schema:
-    |   users  (id, name, email, password, …)
-    |   roles  (id, name)          e.g. 'manager', 'seller', 'baker'
-    |   role_user (user_id, role_id)
-    |
-    | Migration snippet:
-    |
-    |   Schema::create('roles', function (Blueprint $table) {
-    |       $table->id();
-    |       $table->string('role_name')->unique();   // 'manager' | 'seller' | 'baker'
-    |       $table->timestamps();
-    |   });
-    |
-    |   Schema::create('role_user', function (Blueprint $table) {
-    |       $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-    |       $table->foreignId('role_id')->constrained()->cascadeOnDelete();
-    |       $table->primary(['user_id', 'role_id']);
-    |   });
-    |
-    */
-
     /**
      * The roles that belong to the user.
      */
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_user');
+    }
+
+    /**
+     * Fetch the linked Employee record by matching the user's name
+     * against employee_fn + employee_ln (no user_id FK in employees table).
+     * Usage: auth()->user()->employee  or  Auth::user()->employee
+     */
+    public function getEmployeeAttribute(): ?\App\Models\Employee
+    {
+        $parts = explode(' ', trim($this->name), 2);
+        $fn    = $parts[0] ?? '';
+        $ln    = $parts[1] ?? '';
+
+        return \App\Models\Employee::where('employee_fn', $fn)
+                                   ->where('employee_ln', $ln)
+                                   ->first();
     }
 
     /**
