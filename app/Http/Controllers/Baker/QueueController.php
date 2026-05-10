@@ -35,7 +35,7 @@ class QueueController extends Controller
             ->get()
             ->groupBy('order_id');
 
-        return view('baker.queue', compact('pending', 'preparing', 'completed', 'orderItems'));
+        return view('baker.queue.index', compact('pending', 'preparing', 'completed', 'orderItems'));
     }
 
     public function update(Request $request, Order $order)

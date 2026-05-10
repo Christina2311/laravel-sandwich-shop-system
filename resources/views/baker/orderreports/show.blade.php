@@ -21,27 +21,64 @@
 
         body { font-family: 'Nunito', sans-serif; background: var(--cream); display: flex; min-height: 100vh; }
 
-        /* ── SIDEBAR ── */
-        .sidebar { width: var(--sidebar-w); min-height: 100vh; background: var(--brown); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; z-index: 100; }
-        .sidebar-brand { display: flex; flex-direction: column; align-items: center; padding: 1.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .sidebar-brand img { width: 80px; height: 80px; object-fit: contain; }
-        .brand-name { font-weight: 900; font-size: 1rem; color: var(--amber); margin-top: .5rem; letter-spacing: 1px; }
-        .brand-sub { font-size: .75rem; color: rgba(255,255,255,0.5); font-weight: bold; }
-        
-        .nav-section { padding: 1rem .8rem; }
-        .nav-label { font-size: .65rem; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 800; padding-left: 10px; margin-bottom: 5px; }
-        .nav-list { list-style: none; padding: 0; margin: 0; }
-        .nav-list a { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; color: rgba(255,255,255,0.6); text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: 0.2s; }
-        .nav-list a:hover { background: rgba(255,255,255,0.05); color: #fff; }
-        .nav-list a.active { background: var(--amber); color: var(--brown-dark); }
-        .nav-list img { width: 18px; filter: brightness(0) invert(1); opacity: 0.7; }
-        .nav-list a.active img { filter: brightness(0); opacity: 1; }
+        /* ── Sidebar ── */
+        .sidebar {
+            width: 200px;
+            min-width: 200px;
+            background: #5a2d0c;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            position: fixed;
+            top: 0; left: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+        .sidebar-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 22px 16px 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-brand img { width: 300px; height: 160px; border-radius: 0; padding: 0; object-fit: contain; }
+        .sidebar-brand .brand-name { color: #fff; font-weight: 700; font-size: 0.82rem; text-align: center; margin-top: 8px; letter-spacing: 0.5px; text-transform: uppercase; }
+        .sidebar-brand .brand-sub  { color: #c4a07a; font-size: 0.73rem; text-align: center; margin-top: 2px; font-weight: normal; }
 
-        .sidebar-footer { margin-top: auto; padding: 1rem; }
-        .btn-logout { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: rgba(255,255,255,0.6); cursor: pointer; font-weight: bold; }
+        .sidebar-nav { flex: 1; padding: 14px 10px; overflow-y: auto; }
+        .sidebar-section-label {
+            color: #c4a07a;
+            font-size: 0.68rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 10px 8px 4px;
+            font-weight: 600;
+        }
+        .sidebar-nav a {
+            display: flex; align-items: center; gap: 9px;
+            color: #f5e6d3; text-decoration: none;
+            padding: 8px 12px; border-radius: 8px;
+            font-size: 0.83rem; margin-bottom: 2px;
+            transition: background 0.15s; font-weight: 600;
+        }
+        .sidebar-nav a:hover  { background: #7a3e1a; }
+        .sidebar-nav a.active { background: #3d1c06; font-weight: 700; }
+        .sidebar-nav a img    { width: 18px; filter: brightness(0) invert(1); opacity: 0.7; flex-shrink: 0; }
+        .sidebar-nav a.active img { opacity: 1; }
+
+        .sidebar-footer { padding: 14px 10px; border-top: 1px solid rgba(255,255,255,0.1); }
+        .sidebar-footer form button {
+            width: 100%; display: flex; align-items: center; gap: 9px;
+            background: transparent; border: 1px solid rgba(255,255,255,0.2);
+            color: #f5e6d3; padding: 8px 12px; border-radius: 8px;
+            font-size: 0.83rem; cursor: pointer; transition: background 0.15s;
+            font-family: 'Nunito', sans-serif;
+        }
+        .sidebar-footer form button:hover { background: #7a3e1a; }
+        .sidebar-footer form button img   { width: 16px; filter: brightness(0) invert(1); opacity: 0.7; }
 
         /* ── MAIN ── */
-        .main { margin-left: var(--sidebar-w); flex: 1; padding: 2rem; }
+        .main { margin-left: 200px; flex: 1; padding: 2rem; }
 
         /* ── PAGE HEADER ── */
         .page-header {
@@ -173,25 +210,30 @@
     <aside class="sidebar">
         <div class="sidebar-brand">
             <img src="{{ asset('images/sandwich_logo.png') }}" alt="Logo">
-            <div class="brand-name">CPAMA SANDWICH</div>
-            <div class="brand-sub">Baker: {{ auth()->user()->name }}</div>
+            <span class="brand-name">CPAMA SANDWICH</span>
+            <span class="brand-sub">Baker: {{ auth()->user()->name }}</span>
         </div>
-        <div class="nav-section">
-            <div class="nav-label">Main</div>
-            <ul class="nav-list">
-                <li><a href="{{ route('baker.queue') }}"><img src="{{ asset('images/baker_queue_icon.png') }}"> Baker Queue</a></li>
-            </ul>
-            <div class="nav-label" style="margin-top:20px;">Catalog</div>
-            <ul class="nav-list">
-                <li><a href="{{ route('baker.inventorymanagement.index') }}"><img src="{{ asset('images/employee_inventory_icon.png') }}"> Inventory</a></li>
-                <li><a href="{{ route('baker.orders.report') }}" class="active"><img src="{{ asset('images/reports_icon.png') }}"> Orders Report</a></li>
-            </ul>
-        </div>
+
+        <nav class="sidebar-nav">
+            <div class="sidebar-section-label">Main</div>
+            <a href="{{ route('baker.queue') }}">
+                <img src="{{ asset('images/baker_queue_icon.png') }}"> Baker Queue
+            </a>
+
+            <div class="sidebar-section-label" style="margin-top:8px;">Catalog</div>
+            <a href="{{ route('baker.inventorymanagement.index') }}">
+                <img src="{{ asset('images/employee_inventory_icon.png') }}"> Inventory
+            </a>
+            <a href="{{ route('baker.orders.report') }}" class="active">
+                <img src="{{ asset('images/reports_icon.png') }}"> Orders Report
+            </a>
+        </nav>
+
         <div class="sidebar-footer">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="btn-logout">
-                    <img src="{{ asset('images/logout_icon.png') }}" style="width:16px;"> Logout
+                <button type="submit">
+                    <img src="{{ asset('images/logout_icon.png') }}"> Logout
                 </button>
             </form>
         </div>
