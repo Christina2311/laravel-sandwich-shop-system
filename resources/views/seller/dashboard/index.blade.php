@@ -388,6 +388,25 @@
             margin-left: .15rem;
         }
 
+        /* ── Date cell ── */
+        .date-ordered, .date-completed {
+            font-size: .75rem;
+            font-weight: 600;
+            color: var(--text-mid);
+            line-height: 1.5;
+        }
+
+        .date-label {
+            font-size: .63rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-right: 2px;
+        }
+
+        .date-ordered .date-label  { color: var(--text-light); }
+        .date-completed .date-label { color: #1a7a30; }
+
         /* ── Animations ── */
         @keyframes fadeDown {
             from { opacity: 0; transform: translateY(-12px); }
@@ -518,6 +537,7 @@
                                 <th>Customer</th>
                                 <th>Status</th>
                                 <th>Total</th>
+                                <th>Date</th>
                             </tr>
                         </thead>
                         <tbody id="ordersBody">
@@ -589,28 +609,39 @@
                 // Show empty placeholder rows
                 let html = '';
                 for (let i = 0; i < PER_PAGE; i++) {
-                    html += '<tr class="empty-row"><td colspan="4"></td></tr>';
+                    html += '<tr class="empty-row"><td colspan="5"></td></tr>';
                 }
                 tbody.innerHTML = html;
                 document.getElementById('pageInfo').textContent = 'No orders yet today';
                 return;
             }
 
+            const fmt = d => d ? new Date(d).toLocaleDateString('en-PH', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
+
             let html = '';
             slice.forEach(order => {
                 const statusClass = 'status-' + (order.status || 'pending').toLowerCase();
+                const isCompleted = (order.status || '').toLowerCase() === 'completed';
+                const orderedDate = fmt(order.created_at);
+                const completedDate = isCompleted ? fmt(order.updated_at) : null;
+
+                const dateCell = completedDate
+                    ? `<div class="date-ordered"><span class="date-label">Ordered</span> ${orderedDate}</div><div class="date-completed"><span class="date-label">Completed</span> ${completedDate}</div>`
+                    : `<div class="date-ordered"><span class="date-label">Ordered</span> ${orderedDate}</div>`;
+
                 html += `
                     <tr>
                         <td>#${order.id}</td>
                         <td>${order.customer_name ?? '—'}</td>
                         <td><span class="status-pill ${statusClass}">${order.status ?? 'Pending'}</span></td>
                         <td>₱${parseFloat(order.total_amount ?? 0).toLocaleString('en-PH', {minimumFractionDigits: 2})}</td>
+                        <td>${dateCell}</td>
                     </tr>`;
             });
 
             // Pad with empty rows so height stays consistent
             for (let i = slice.length; i < PER_PAGE; i++) {
-                html += '<tr class="empty-row"><td colspan="4"></td></tr>';
+                html += '<tr class="empty-row"><td colspan="5"></td></tr>';
             }
 
             tbody.innerHTML = html;

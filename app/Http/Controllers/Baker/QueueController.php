@@ -41,12 +41,12 @@ class QueueController extends Controller
     public function update(Request $request, Order $order)
     {
         $request->validate([
-            'status' => ['required', 'in:Preparing,Ready'],
+            'status' => ['required', 'in:preparing,ready,completed'],  // ← lowercase to match DB enum, added completed
         ]);
 
         $updateData = ['status' => $request->status];
 
-        if ($request->status === 'Preparing' && is_null($order->baker_id)) {
+        if ($request->status === 'preparing' && is_null($order->baker_id)) {  // ← lowercase
             $bakerId = Employee::where('user_id', Auth::id())->value('id');
             $updateData['baker_id'] = $bakerId;
         }
@@ -55,6 +55,6 @@ class QueueController extends Controller
 
         return redirect()
             ->route('baker.queue')
-            ->with('success', 'Order #' . str_pad($order->id, 4, '0', STR_PAD_LEFT) . ' updated to ' . $request->status . '.');
+            ->with('success', 'Order #' . str_pad($order->id, 4, '0', STR_PAD_LEFT) . ' updated to ' . ucfirst($request->status) . '.');
     }
 }

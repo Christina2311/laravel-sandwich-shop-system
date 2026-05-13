@@ -40,7 +40,11 @@ class StockRequestController extends Controller
             return redirect()->back()->with('error', 'This request has already been processed.');
         }
 
-        DB::transaction(function () use ($stockRequest) {
+        $request->validate([
+            'manager_note' => 'nullable|string|max:500',
+        ]);
+
+        DB::transaction(function () use ($stockRequest, $request) {
             // 1. Create the official StockIn record
             StockIn::create([
                 'employee_id' => $stockRequest->employee_id,
@@ -69,8 +73,11 @@ class StockRequestController extends Controller
                 ]);
             }
 
-            // 3. Mark request as approved
-            $stockRequest->update(['status' => 'approved']);
+            // 3. Mark request as approved and save manager_note
+            $stockRequest->update([
+                'status'       => 'approved',
+                'manager_note' => $request->manager_note, // ← fixed: was never saved
+            ]);
         });
 
         return redirect()->back()->with('success', 'Stock-in request approved and inventory updated.');

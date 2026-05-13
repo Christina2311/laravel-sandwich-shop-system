@@ -44,7 +44,7 @@ class DashboardController extends Controller
         $activeStaff = DB::table('users')
             ->join('role_user', 'users.id', '=', 'role_user.user_id')
             ->join('roles',     'role_user.role_id', '=', 'roles.id')
-            ->whereIn('roles.role_name', ['seller', 'baker'])
+            ->whereIn('roles.role_name', ['Seller', 'Baker'])
             ->distinct('users.id')
             ->count('users.id');
 
@@ -69,17 +69,20 @@ class DashboardController extends Controller
         }
 
         // ── Staff Performance Today ───────────────────────────────────
+        // seller_id and baker_id on orders are employee IDs, not user IDs.
+        // We must join through employees to match correctly.
         $sellers = DB::table('users')
-            ->join('role_user', 'users.id', '=', 'role_user.user_id')
-            ->join('roles',     'role_user.role_id', '=', 'roles.id')
-            ->where('roles.role_name', 'seller')
+            ->join('role_user',  'users.id',       '=', 'role_user.user_id')
+            ->join('roles',      'role_user.role_id', '=', 'roles.id')
+            ->join('employees',  'employees.user_id', '=', 'users.id')
+            ->where('roles.role_name', 'Seller')
             ->select(
                 'users.id',
                 'users.name',
                 DB::raw("'seller' as role"),
                 DB::raw('(
                     SELECT COUNT(*) FROM orders
-                    WHERE orders.seller_id = users.id
+                    WHERE orders.seller_id = employees.id
                     AND DATE(orders.created_at) = CURDATE()
                 ) as total_orders'),
                 DB::raw('0 as total_baked')
@@ -87,9 +90,10 @@ class DashboardController extends Controller
             ->get();
 
         $bakers = DB::table('users')
-            ->join('role_user', 'users.id', '=', 'role_user.user_id')
-            ->join('roles',     'role_user.role_id', '=', 'roles.id')
-            ->where('roles.role_name', 'baker')
+            ->join('role_user',  'users.id',        '=', 'role_user.user_id')
+            ->join('roles',      'role_user.role_id', '=', 'roles.id')
+            ->join('employees',  'employees.user_id', '=', 'users.id')
+            ->where('roles.role_name', 'Baker')
             ->select(
                 'users.id',
                 'users.name',
@@ -97,7 +101,7 @@ class DashboardController extends Controller
                 DB::raw('0 as total_orders'),
                 DB::raw('(
                     SELECT COUNT(*) FROM orders
-                    WHERE orders.baker_id = users.id
+                    WHERE orders.baker_id = employees.id
                     AND DATE(orders.created_at) = CURDATE()
                 ) as total_baked')
             )

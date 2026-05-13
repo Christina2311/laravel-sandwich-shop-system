@@ -208,7 +208,7 @@
                         </div>
                         <form method="POST" action="{{ route('baker.queue.update', $order->id) }}">
                             @csrf @method('PATCH')
-                            <input type="hidden" name="status" value="Preparing">
+                            <input type="hidden" name="status" value="preparing">
                             <button type="submit" class="btn btn-start">Start</button>
                         </form>
                     </div>
@@ -242,7 +242,7 @@
                         </div>
                         <form method="POST" action="{{ route('baker.queue.update', $order->id) }}">
                             @csrf @method('PATCH')
-                            <input type="hidden" name="status" value="Ready">
+                            <input type="hidden" name="status" value="completed">
                             <button type="submit" class="btn btn-complete">Complete</button>
                         </form>
                     </div>
